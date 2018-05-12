@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ComponentFactoryResolver } from '@angular/core';
 
 import { BodyComponentDirective } from './body-component.directive';
 import { LoginComponent } from './login/login.component';
@@ -12,7 +12,7 @@ import { MainComponent } from './main/main.component';
 })
 
 
-export class AppComponent implements OnInit, OnDestroy{
+export class AppComponent implements OnInit{
   title = 'MeasureMe';
   @ViewChild(BodyComponentDirective) bodyComponent: BodyComponentDirective;
 
@@ -24,9 +24,6 @@ export class AppComponent implements OnInit, OnDestroy{
 	}else{
 		this.loadComponent(LoginComponent);
 	}
-  }
-
-  ngOnDestroy() {
   }
 
   checkLoginStatus() {
