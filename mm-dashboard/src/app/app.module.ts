@@ -5,13 +5,17 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { BodyComponentDirective } from './body-component.directive';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { LoginPageIntroComponent } from './login-page-intro/login-page-intro.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MainComponent,
-    BodyComponentDirective
+    BodyComponentDirective,
+    LoginFormComponent,
+    LoginPageIntroComponent
   ],
   imports: [
     BrowserModule
