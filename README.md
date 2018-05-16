@@ -1,2 +1,2 @@
 # MeasureMe
-Personal Analytics Distributed Data Processing System
+Personal Analytics Real-time Distributed Data Processing System
