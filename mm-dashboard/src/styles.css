@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+
+#login-background {
+	background-image: url('assets/main_bg.JPEG');
+	height:100%;
+	background-size: 100%;
+	background-repeat:no-repeat;
+}
+
+
+.login-form-part {
+	display: flex;
+  	justify-content: center;
+  	flex-direction: column;
+}
+
+.url {
+	cursor: pointer;
+	color: blue;
+}
