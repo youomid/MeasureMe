@@ -13,3 +13,8 @@
   	justify-content: center;
   	flex-direction: column;
 }
+
+.url {
+	cursor: pointer;
+	color: blue;
+}

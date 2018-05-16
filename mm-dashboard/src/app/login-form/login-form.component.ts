@@ -9,6 +9,10 @@ import {Router} from '@angular/router';
 })
 export class LoginFormComponent implements OnInit {
 
+  username = ""
+  password = ""
+  message = ""
+
   constructor(private router: Router) {
   	this.router = router
   }
@@ -22,6 +26,11 @@ export class LoginFormComponent implements OnInit {
 
   guestLogin(){
   	this.router.navigate(['/main']);
+  }
+
+  forgotPassword(){
+  	this.message = "The forgot password feature is \
+  		currently in development."
   }
 
 }
