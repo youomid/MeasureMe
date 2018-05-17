@@ -7,6 +7,7 @@ import { MainComponent } from './main/main.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { LoginPageIntroComponent } from './login-page-intro/login-page-intro.component';
 import { AppRoutingModule } from './/app-routing.module';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { AppRoutingModule } from './/app-routing.module';
     LoginComponent,
     MainComponent,
     LoginFormComponent,
-    LoginPageIntroComponent
+    LoginPageIntroComponent,
+    SummaryComponent,
   ],
   imports: [
     BrowserModule,
