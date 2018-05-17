@@ -17,14 +17,18 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
 
-  	if(!this.isAuthenticated()){
-  		this.router.navigate(['/login']);
-  	}
+  	// if(!this.isAuthenticated()){
+  		// this.router.navigate(['/login']);
+  	// }
 
   }
 
   isAuthenticated(){
   	return false;
+  }
+
+  summary(){
+    this.router.navigate(['/main/summary']);
   }
 
 }
