@@ -27,7 +27,7 @@ export class MainComponent implements OnInit {
   	return false;
   }
 
-  summary(){
+  goToSummary(){
     this.router.navigate(['/main/summary']);
   }
 

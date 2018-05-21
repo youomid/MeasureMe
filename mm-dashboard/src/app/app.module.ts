@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
@@ -8,6 +7,10 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { LoginPageIntroComponent } from './login-page-intro/login-page-intro.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { SummaryComponent } from './summary/summary.component';
+import { APIService } from './api.service';
+import { HttpClientModule } from '@angular/common/http'; 
+
+
 
 @NgModule({
   declarations: [
@@ -20,9 +23,10 @@ import { SummaryComponent } from './summary/summary.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [APIService],
   entryComponents: [LoginComponent, MainComponent],
   bootstrap: [AppComponent]
 })
