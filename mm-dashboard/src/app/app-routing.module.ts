@@ -7,7 +7,7 @@ import { SummaryComponent } from './summary/summary.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
   { path: 'main', component: MainComponent, 
   	children: [
   		{ path: 'summary', component: SummaryComponent },

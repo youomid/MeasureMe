@@ -135,3 +135,37 @@ body {
     margin-right: 0;
   }
 }
+
+.feed-entry {
+ border-bottom: 1px solid #eee;
+ padding-bottom: 12px;
+ padding-top: 12px;
+
+}
+
+ .fa {
+   margin-right: 12px;
+ }
+
+ .meta {
+   display: block;
+   margin-left: 32px;
+   max-width: 80%;
+ }
+
+.animation {
+  -webkit-transition: 1s;
+}
+.animation.ng-enter {
+  opacity: 0;
+}
+.animation.ng-leave {
+  opacity: 1;
+}
+.animation.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.animation.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
