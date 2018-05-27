@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import { AuthService } from './../auth.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ export class LoginFormComponent implements OnInit {
   password = ""
   message = ""
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private _auth: AuthService) {
   	this.router = router
   }
 
@@ -21,11 +22,20 @@ export class LoginFormComponent implements OnInit {
   }
 
   login(){
-  	this.router.navigate(['/main']);
+    this._auth.login(this.username, this.password)
+      .subscribe(
+          res => {
+            this._auth.storeToken(res.key);
+            this.router.navigate(['/main']);
+          },
+          err => {
+            this.message = "Login was not successful."
+          }
+      );
   }
 
   guestLogin(){
-  	this.router.navigate(['/main']);
+  	this._auth.login("guest", "guest")
   }
 
   forgotPassword(){

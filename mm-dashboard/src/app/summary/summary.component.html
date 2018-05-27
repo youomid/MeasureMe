@@ -10,23 +10,16 @@
 	  <div class="col-md-7">
 	  	<section>
 	  		Events Feed
-		    <div class="feed-entry">
-		      <span class="pull-right text-muted">27 minutes ago</span>
+		    <div class="feed-entry" *ngFor="let event of events">
+		      <span class="pull-right text-muted">{{event['date']}}</span>
 		      <i class="fa text-muted"></i>
-		      Started work session
+		      	{{event['title']}}
 		      <small class="meta text-muted">
-		        Studying for finals
-		      </small>
-		    </div>
-		    <div class="feed-entry">
-		      <span class="pull-right text-muted">2 minutes ago</span>
-		      <i class="fa text-muted"></i>
-		      Finished work session
-		      <small class="meta text-muted">
-		        Studying for finals
+		        {{event['description']}}
 		      </small>
 		    </div>
 		  </section>
 	  </div>
 	</div>
+	<button style="width:25%" type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Add Event </button>
 </section>

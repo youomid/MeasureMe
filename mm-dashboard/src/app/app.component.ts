@@ -15,9 +15,4 @@ export class AppComponent {
 
   constructor() { }
 
-  checkLoginStatus() {
-  	//TODO: authenticate user using django auth api
-  	return false
-  }
-
 }

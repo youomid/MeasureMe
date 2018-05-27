@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import { AuthService } from './../auth.service';
 
 
 @Component({
@@ -11,20 +12,27 @@ import {Router} from '@angular/router';
 
 export class MainComponent implements OnInit {
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private _auth: AuthService) {
   	this.router = router
   }
 
   ngOnInit() {
+    var authToken = this._auth.getToken();
 
-  	// if(!this.isAuthenticated()){
-  		// this.router.navigate(['/login']);
-  	// }
+  	if(authToken){
+      this._auth.validateToken(authToken)
+        .subscribe(
+            res => {
+              console.log('validated');
+            },
+            err => {
+              this.router.navigate(['/login']);
+            }
+        );
+    }else{
+      this.router.navigate(['/login']);
+    }
 
-  }
-
-  isAuthenticated(){
-  	return false;
   }
 
   goToSummary(){
