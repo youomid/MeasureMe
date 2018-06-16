@@ -1,4 +1,4 @@
-
+from processing.tasks import process_event
 
 
 class BaseProcessor(object):
@@ -9,5 +9,6 @@ class BaseProcessor(object):
 	def process_message(self, event):
 		print 'Received event: %s' % event
 
-		
+		process_event.delay(event)
+
 

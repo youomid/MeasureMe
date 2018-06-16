@@ -5,11 +5,11 @@ import json
 # third party imports
 
 # local imports
-from core.celery import app as celery
+from core.celeryapp import app as celery
 
 
 @celery.task
-def process_event():
+def process_event(event):
 
 	print 'processing_event'
 
