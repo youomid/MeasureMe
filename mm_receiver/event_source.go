@@ -71,6 +71,6 @@ func send_sample_events(num_events int){
 
 func main() {
 	wg.Add(1)
-	go send_sample_events(50)
+	go send_sample_events(5000)
 	wg.Wait()
 }
