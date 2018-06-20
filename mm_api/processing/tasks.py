@@ -12,7 +12,7 @@ from core.redisapp import redis
 @celery.task
 def process_event(event):
 
-	print 'processing_event'
+	print 'processing_event', event
 
 	
 	

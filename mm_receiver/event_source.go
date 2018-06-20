@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"sync"
+	"encoding/json"
+	"math/rand"
 	"github.com/streadway/amqp"
 )
 
@@ -31,31 +33,37 @@ func log_event(){
 	fmt.Printf("Logging event...\n")
 }
 
+func generate_random_event() map[string]interface{} {
+	minutes := rand.Intn(100)
+
+	msg := map[string]interface{}{"user": "test_user", "time": minutes,
+	"title": "Test title", "description": "test description"}
+
+	return msg
+}
+
 func queue_event(){
 	fmt.Printf("Queuing event...\n")
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5673/")
 	failOnError(err, "Failed to dial RMQ")
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to declare a channel")
-	q, err := ch.QueueDeclare(
-	  "test", // name
-	  true,   // durable
-	  false,   // delete when unused
-	  false,   // exclusive
-	  false,   // no-wait
-	  nil,     // arguments
-	)
+
 	failOnError(err, "Failed to declare a queue")
-	body := "hello"
+	body, _ := json.Marshal(generate_random_event())
 	err = ch.Publish(
-	  "test_queue",     // exchange
-	  q.Name, // routing key
+	  "test_queue",  // exchange
+	  "test", // routing key
 	  false,  // mandatory
 	  false,  // immediate
-	  amqp.Publishing {
-	    ContentType: "text/plain",
-	    Body:        []byte(body),
-	  })
+	  amqp.Publishing{
+        Headers:         amqp.Table{},
+        ContentType:     "application/json",
+        ContentEncoding: "",
+        Body:            []byte(body),
+        DeliveryMode:    amqp.Transient, 
+        Priority:        0,              
+	  },)
 	failOnError(err, "Failed to publish")
 }
 
@@ -71,6 +79,6 @@ func send_sample_events(num_events int){
 
 func main() {
 	wg.Add(1)
-	go send_sample_events(5000)
+	go send_sample_events(50)
 	wg.Wait()
 }
