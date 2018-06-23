@@ -36,7 +36,7 @@ func log_event(){
 func generate_random_event() map[string]interface{} {
 	minutes := rand.Intn(100)
 
-	msg := map[string]interface{}{"user": "test_user", "time": minutes,
+	msg := map[string]interface{}{"user": "test_user", "date": minutes,
 	"title": "Test title", "description": "test description"}
 
 	return msg
@@ -79,6 +79,6 @@ func send_sample_events(num_events int){
 
 func main() {
 	wg.Add(1)
-	go send_sample_events(50)
+	go send_sample_events(1)
 	wg.Wait()
 }

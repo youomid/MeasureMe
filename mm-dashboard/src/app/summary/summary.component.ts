@@ -70,6 +70,7 @@ export class SummaryComponent implements OnInit {
       var self = this;
 
       this.socket.onmessage = function(e) {
+        console.log('message', e);
           var parsedData = JSON.parse(e.data);
           self.events.push(parsedData)
       }
@@ -82,7 +83,6 @@ export class SummaryComponent implements OnInit {
   }
 
   sendMessage(){
-    // this.socket.send("hello world");
     this._api.postEvent("0 minutes ago", "Test Event", "Test Description")
   }
 
