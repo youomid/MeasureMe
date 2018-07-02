@@ -9,6 +9,8 @@ from .serializers import (
 	EventsSerializer
 	)
 
+from processing.models import Event
+
 
 class SummaryView(GenericAPIView):
 
@@ -29,6 +31,13 @@ class SummaryView(GenericAPIView):
 
 class EventsView(GenericAPIView):
 	serializer_class = EventsSerializer
+
+	def get(self, request, *args, **kwargs):
+
+		return Response(serializer_class(
+			Event.objects.filter(request.GET.get('username')),
+			many=True)
+		)
 
 	def post(self, request, *args, **kwargs):
 		Group("events").send({

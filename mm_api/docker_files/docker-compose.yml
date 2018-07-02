@@ -1,0 +1,54 @@
+version: "3"
+services:
+  mm_dashboard:
+    image: mm-dashboard
+    ports:
+      - "4200:4200"
+    networks:
+      - webnet
+  postgres:
+    image: postgres:latest
+    ports:
+      - "2345:5432"
+    networks:
+      - webnet
+  redis:
+    image: redis:latest
+    ports:
+      - "9736:6379"
+    command: redis-server
+    networks:
+      - webnet
+  interfaceserver:
+    image: interfaceserver
+    ports:
+      - "8000:8000"
+    networks:
+      - webnet
+    depends_on:
+      - redis
+      - postgres
+  workerserver:
+    image: workerserver
+    networks:
+      - webnet
+    depends_on:
+      - redis
+      - postgres
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   ports:
+  #     - "15673:15672"
+  #     - "5673:5672"
+  #   networks:
+  #     - webnet
+  # subscribe_events:
+  #   image: subscribe_events
+  #   networks:
+  #     - webnet
+  # celery_workers:
+  #   image: celery_workers
+  #   networks:
+  #     - webnet
+networks:
+  webnet:

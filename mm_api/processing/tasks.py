@@ -1,6 +1,7 @@
 # standard library imports
 import ast
 import json
+from datetime import datetime
 
 # third party imports
 from channels import Group
@@ -10,21 +11,21 @@ import requests
 # local imports
 from core.celeryapp import app as celery
 from core.redisapp import redis
+from processing.models import Event
 
 
 @celery.task
 def process_event(event):
-	# TODO: use channels consumer to send messages directly
+
 	event = json.loads(event)
-	payload = {
-		"date": str(event['date']) + " minutes ago",
-		"title": event['title'],
-		"description": event['description']
-	}
-	headers = {
-		'Authorization': "Token " + settings.API_TOKEN
-	}
-	print requests.post(url="http://localhost:8000/events/", data=payload, headers=headers).content
+
+	Event.objects.create(
+		user_name=event['user'],
+		date=datetime.strptime(event['date'], "%Y-%m-%dT%H:%M:%S",
+		title=event['title'],
+		description=event['description']
+		)
+	
 
 
 	

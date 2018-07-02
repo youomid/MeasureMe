@@ -1,9 +1,12 @@
 #!/bin/bash
 
-# Start Gunicorn processes
-echo Starting Gunicorn.
-exec gunicorn mm_api.wsgi:application \
-    --bind 0.0.0.0:8000 \
-    --workers 3
+# Start asgi server
+echo Starting asgi server.
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+exec daphne -b 0.0.0.0 -p 8000 mm_api.asgi:channel_layer
 
 
