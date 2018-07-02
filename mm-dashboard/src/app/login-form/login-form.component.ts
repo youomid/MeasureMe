@@ -25,7 +25,11 @@ export class LoginFormComponent implements OnInit {
     this._auth.login(this.username, this.password)
       .subscribe(
           res => {
-            this._auth.storeToken(res.key);
+            try{
+              this._auth.storeToken(res['key']);
+            }catch(error){
+              console.log('Cannot store auth key.');
+            }
             this.router.navigate(['/main']);
           },
           err => {
