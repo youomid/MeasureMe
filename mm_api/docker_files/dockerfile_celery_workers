@@ -8,10 +8,6 @@ RUN useradd -ms /bin/bash nonroot
 
 USER nonroot
 
-RUN python manage.py makemigrations
-
-RUN python manage.py migrate
-
 CMD celery worker -A mm_api --app=core.celeryapp:app
 
 

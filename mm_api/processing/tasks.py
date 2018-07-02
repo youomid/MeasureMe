@@ -17,15 +17,7 @@ from processing.models import Event
 @celery.task
 def process_event(event):
 
-	event = json.loads(event)
+	Group("events").send({
+		"text": event
+	})
 
-	Event.objects.create(
-		user_name=event['user'],
-		date=datetime.strptime(event['date'], "%Y-%m-%dT%H:%M:%S",
-		title=event['title'],
-		description=event['description']
-		)
-	
-
-
-	
