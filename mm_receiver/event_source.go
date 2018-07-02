@@ -48,7 +48,6 @@ func queue_event(){
 	failOnError(err, "Failed to dial RMQ")
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to declare a channel")
-
 	failOnError(err, "Failed to declare a queue")
 	body, _ := json.Marshal(generate_random_event())
 	err = ch.Publish(
@@ -79,6 +78,6 @@ func send_sample_events(num_events int){
 
 func main() {
 	wg.Add(1)
-	go send_sample_events(1)
+	go send_sample_events(3)
 	wg.Wait()
 }

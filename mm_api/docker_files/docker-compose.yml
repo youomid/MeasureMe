@@ -35,20 +35,20 @@ services:
     depends_on:
       - redis
       - postgres
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   ports:
-  #     - "15673:15672"
-  #     - "5673:5672"
-  #   networks:
-  #     - webnet
-  # subscribe_events:
-  #   image: subscribe_events
-  #   networks:
-  #     - webnet
-  # celery_workers:
-  #   image: celery_workers
-  #   networks:
-  #     - webnet
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15673:15672"
+      - "5673:5672"
+    networks:
+      - webnet
+  subscribe_events:
+    image: subscribe_events
+    networks:
+      - webnet
+  celery_workers:
+    image: celery_workers
+    networks:
+      - webnet
 networks:
   webnet:
