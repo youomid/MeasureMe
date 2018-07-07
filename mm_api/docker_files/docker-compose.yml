@@ -46,9 +46,21 @@ services:
     image: subscribe_events
     networks:
       - webnet
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
   celery_workers:
     image: celery_workers
     networks:
       - webnet
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
 networks:
   webnet:
