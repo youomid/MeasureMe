@@ -1,1 +1,8 @@
-*.pyc 
+*.pyc
+mm_api/db.sqlite3
+mm_api/dump.rdb
+mm_api/mm_api/settings.py
+notes.txt
+
+
+ 
