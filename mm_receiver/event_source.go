@@ -1,12 +1,14 @@
 package main
 
 import (
+	"time"
 	"fmt"
 	"log"
 	"sync"
 	"encoding/json"
 	"math/rand"
 	"github.com/streadway/amqp"
+	"github.com/valyala/fasthttp"
 )
 
 /*
@@ -73,8 +75,59 @@ func send_sample_events(num_events int){
 
 }
 
+func gen_comp_ws(){
+	var events []map[string]interface{}
+
+	event := map[string]interface{}{
+		"user": "guest",
+		"date": time.Now(),
+		"eventType": "WorkSessionStartedEvent",
+	}
+
+	events = append(events, event)
+	fmt.Printf("%v", events)
+}
+
+func simulate(sim_type string){
+	switch sim_type {
+	case "complete-work-session":
+		gen_comp_ws()
+	case "incomplete-work-session":
+	case "paused-work-session":
+	case "daily-goal-progress":
+	case "daily-goal-complete":
+	}
+}
+
+func requestHandler(ctx *fasthttp.RequestCtx) {
+	switch string(ctx.Path()) {
+	case "/simulate":
+		fmt.Printf("Received request\n")
+		req := &ctx.Request
+		fmt.Printf(string(req.Body()))
+
+		simulate(string(req.Body()))
+
+	}
+}
+
+func start_server(){
+	h := requestHandler
+	go func() {
+		fmt.Printf("Server started\n")
+		if err := fasthttp.ListenAndServe("127.0.0.1:6470", h); err != nil {
+			fmt.Sprintf("Error in ListenAndServe: %s", err)
+		}
+	}()
+}
+
 func main() {
 	wg.Add(1)
-	go send_sample_events(10000)
+	// go send_sample_events(10000)
+	start_server()
 	wg.Wait()
 }
+
+
+
+

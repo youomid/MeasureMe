@@ -4,11 +4,11 @@ import { Chart } from 'chart.js';
 
 
 @Component({
-  selector: 'app-summary',
-  templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.css']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
-export class SummaryComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
   chart = []; 
   socket = new WebSocket("ws://" + 'localhost:8000' + "/events/");

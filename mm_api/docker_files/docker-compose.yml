@@ -1,11 +1,11 @@
 version: "3"
 services:
-  mm_dashboard:
-    image: mm-dashboard
-    ports:
-      - "4200:4200"
-    networks:
-      - webnet
+  # mm_dashboard:
+  #   image: mm-dashboard
+  #   ports:
+  #     - "4200:4200"
+  #   networks:
+  #     - webnet
   postgres:
     image: postgres:latest
     ports:

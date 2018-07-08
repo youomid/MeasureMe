@@ -6,7 +6,7 @@ import { MainComponent } from './main/main.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { LoginPageIntroComponent } from './login-page-intro/login-page-intro.component';
 import { AppRoutingModule } from './/app-routing.module';
-import { SummaryComponent } from './summary/summary.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { APIService } from './api.service';
 import { HttpClientModule } from '@angular/common/http'; 
 
@@ -19,7 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
     MainComponent,
     LoginFormComponent,
     LoginPageIntroComponent,
-    SummaryComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
