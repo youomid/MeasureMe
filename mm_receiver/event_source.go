@@ -90,15 +90,154 @@ func gen_comp_ws() []map[string]interface{} {
 	return events
 }
 
+func gen_incomp_ws() []map[string]interface{} {
+	// generate incomplete work session events
+
+	var events []map[string]interface{}
+
+	current := current_time()
+
+	event := map[string]interface{}{
+		"user": "guest",
+		"date": current,
+		"eventType": "WorkSessionStartedEvent",
+	}
+	event["eventInfo"] = map[string]interface{}{
+		"SessionLength": 25,
+	}
+	events = append(events, event)
+
+	// work session is paused after 10 minutes
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 600000,
+		"eventType": "WorkSessionPausedEvent",
+	}
+	events = append(events, event)
+
+	// work session is reset after two seconds
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 602000,
+		"eventType": "WorkSessionResetEvent",
+	}
+	events = append(events, event)
+
+	return events
+}
+
+func gen_comp_pws() []map[string]interface{} {
+	// generate complete work session event that is paused
+
+	var events []map[string]interface{}
+
+	current := current_time()
+
+	event := map[string]interface{}{
+		"user": "guest",
+		"date": current,
+		"eventType": "WorkSessionStartedEvent",
+	}
+	event["eventInfo"] = map[string]interface{}{
+		"SessionLength": 25,
+	}
+	events = append(events, event)
+
+	// work session is paused after 10 minutes
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 600000,
+		"eventType": "WorkSessionPausedEvent",
+	}
+	events = append(events, event)
+
+	// work session is restarted after 5 minutes
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 900000,
+		"eventType": "WorkSessionRestartedEvent",
+	}
+	events = append(events, event)
+
+	// work session is completed after another 10 minutes
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 1500000,
+		"eventType": "WorkSessionCompletedEvent",
+	}
+	events = append(events, event)
+
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 1500000,
+		"eventType": "BreakSessionStartedEvent",
+	}
+	event["eventInfo"] = map[string]interface{}{
+		"SessionLength": 5,
+	}
+	events = append(events, event)
+
+	// break session is completed after 5 minutes
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 300000,
+		"eventType": "BreakSessionCompletedEvent",
+	}
+	events = append(events, event)
+
+	return events
+}
+
+func gen_daily_p() []map[string]interface{} {
+	// generate events for progress in daily goals
+
+	var events []map[string]interface{}
+
+	current := current_time()
+
+	event := map[string]interface{}{
+		"user": "guest",
+		"date": current,
+		"eventType": "DailyGoalProgressEvent",
+	}
+	event["eventInfo"] = map[string]interface{}{
+		"Progress": 33.3,
+	}
+	events = append(events, event)
+
+	return events
+}
+
+func gen_daily_c() []map[string]interface{} {
+	// generate complete work session event that is paused
+
+	var events []map[string]interface{}
+
+	current := current_time()
+
+	event := map[string]interface{}{
+		"user": "guest",
+		"date": current,
+		"eventType": "DailyGoalCompletedEvent",
+	}
+	events = append(events, event)
+
+	return events
+}
+
 func simulate(sim_type string){
 	var events []map[string]interface{}
 	switch sim_type {
 	case "complete-work-session":
 		events = gen_comp_ws()
 	case "incomplete-work-session":
+		events = gen_incomp_ws()
 	case "paused-work-session":
+		events = gen_comp_pws()
 	case "daily-goal-progress":
+		events = gen_daily_p()
 	case "daily-goal-complete":
+		events = gen_daily_c()
 	}
 	publish_events(events)
 }
@@ -132,10 +271,7 @@ func publish_events(events []map[string]interface{}){
 func requestHandler(ctx *fasthttp.RequestCtx) {
 	switch string(ctx.Path()) {
 	case "/simulate":
-		fmt.Printf("Received request\n")
 		req := &ctx.Request
-		fmt.Printf(string(req.Body()))
-
 		simulate(string(req.Body()))
 
 	}
