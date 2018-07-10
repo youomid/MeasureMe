@@ -31,10 +31,6 @@ func failOnError(err error, msg string) {
   }
 }
 
-func log_event(event_num int){
-	fmt.Printf("Logging event number: %d\n", event_num)
-}
-
 func generate_random_event() map[string]interface{} {
 	minutes := rand.Intn(100)
 
@@ -44,58 +40,92 @@ func generate_random_event() map[string]interface{} {
 	return msg
 }
 
-func queue_event(){
-	body, _ := json.Marshal(generate_random_event())
-	err := channel.Publish(
-	  "test_queue",  // exchange
-	  "test", // routing key
-	  false,  // mandatory
-	  false,  // immediate
-	  amqp.Publishing{
-        Headers:         amqp.Table{},
-        ContentType:     "application/json",
-        ContentEncoding: "",
-        Body:            []byte(body),
-        DeliveryMode:    amqp.Transient, 
-        Priority:        0,              
-	  },)
-	failOnError(err, "Failed to publish")
+func current_time() int64 {
+    return time.Now().UnixNano() / (int64(time.Millisecond)/int64(time.Nanosecond))
 }
 
-func send_sample_events(num_events int){
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5673/")
-	failOnError(err, "Failed to dial RMQ")
-	channel, err = conn.Channel()
-	failOnError(err, "Failed to declare a channel")
-	defer wg.Done()
-	for i:= 0; i < num_events; i++ {
-		queue_event()
-		log_event(i)
-	}
+func gen_comp_ws() []map[string]interface{} {
+	// generate complete work session events
 
-}
-
-func gen_comp_ws(){
 	var events []map[string]interface{}
+
+	current := current_time()
 
 	event := map[string]interface{}{
 		"user": "guest",
-		"date": time.Now(),
+		"date": current,
 		"eventType": "WorkSessionStartedEvent",
 	}
-
+	event["eventInfo"] = map[string]interface{}{
+		"SessionLength": 25,
+	}
 	events = append(events, event)
-	fmt.Printf("%v", events)
+
+	// work session is completed after 25 minutes
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 1500000,
+		"eventType": "WorkSessionCompletedEvent",
+	}
+	events = append(events, event)
+
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 1500000,
+		"eventType": "BreakSessionStartedEvent",
+	}
+	event["eventInfo"] = map[string]interface{}{
+		"SessionLength": 5,
+	}
+	events = append(events, event)
+
+	// break session is completed after 5 minutes
+	event = map[string]interface{}{
+		"user": "guest",
+		"date": current + 300000,
+		"eventType": "BreakSessionCompletedEvent",
+	}
+	events = append(events, event)
+
+	return events
 }
 
 func simulate(sim_type string){
+	var events []map[string]interface{}
 	switch sim_type {
 	case "complete-work-session":
-		gen_comp_ws()
+		events = gen_comp_ws()
 	case "incomplete-work-session":
 	case "paused-work-session":
 	case "daily-goal-progress":
 	case "daily-goal-complete":
+	}
+	publish_events(events)
+}
+
+func publish_events(events []map[string]interface{}){
+	conn, err := amqp.Dial("amqp://guest:guest@localhost:5673/")
+	failOnError(err, "Failed to dial RMQ")
+
+	channel, err = conn.Channel()
+	failOnError(err, "Failed to declare a channel")
+
+	for _, element := range events {
+		body, _ := json.Marshal(element)
+		err := channel.Publish(
+		  "test_queue",  // exchange
+		  "test", // routing key
+		  false,  // mandatory
+		  false,  // immediate
+		  amqp.Publishing{
+	        Headers:         amqp.Table{},
+	        ContentType:     "application/json",
+	        ContentEncoding: "",
+	        Body:            []byte(body),
+	        DeliveryMode:    amqp.Transient, 
+	        Priority:        0,              
+		  },)
+		failOnError(err, "Failed to publish")
 	}
 }
 
