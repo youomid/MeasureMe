@@ -17,21 +17,21 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    var authToken = this._auth.getToken();
+   //  var authToken = this._auth.getToken();
 
-  	if(authToken){
-      this._auth.validateToken(authToken)
-        .subscribe(
-            res => {
-              this.goToDashboard()
-            },
-            err => {
-              this.router.navigate(['/login']);
-            }
-        );
-    }else{
-      this.router.navigate(['/login']);
-    }
+  	// if(authToken){
+   //    this._auth.validateToken(authToken)
+   //      .subscribe(
+   //          res => {
+   //            this.goToDashboard()
+   //          },
+   //          err => {
+   //            this.router.navigate(['/login']);
+   //          }
+   //      );
+   //  }else{
+   //    this.router.navigate(['/login']);
+   //  }
 
   }
 

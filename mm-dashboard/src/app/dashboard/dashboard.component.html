@@ -19,7 +19,46 @@
 		      </small>
 		    </div>
 		  </section>
+		  <section style="margin-top:3vh">
+			  <button style="width:25%" type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Add Event </button>
+			  <button style="width:25%" type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Complete Work Session </button>
+			  <button style="width:25%" type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Incomplete Work Session </button>
+			</section>
 	  </div>
 	</div>
-	<button style="width:25%" type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Add Event </button>
+	<div class="row" style="margin-top:3vh">
+		<div class="col-md-5">
+			<table class="table">
+			    <thead class="mdb-color darken-3">
+			        <tr class="text-white">
+			            <th>#</th>
+			            <th>First Name</th>
+			            <th>Last Name</th>
+			            <th>Username</th>
+			        </tr>
+			    </thead>
+
+			    <tbody>
+			        <tr>
+			            <th scope="row">1</th>
+			            <td>Mark</td>
+			            <td>Otto</td>
+			            <td>@mdo</td>
+			        </tr>
+			        <tr>
+			            <th scope="row">2</th>
+			            <td>Jacob</td>
+			            <td>Thornton</td>
+			            <td>@fat</td>
+			        </tr>
+			        <tr>
+			            <th scope="row">3</th>
+			            <td>Larry</td>
+			            <td>the Bird</td>
+			            <td>@twitter</td>
+			        </tr>
+			    </tbody>
+			</table>
+		</div>
+	</div>
 </section>
