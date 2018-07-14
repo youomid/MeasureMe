@@ -4,12 +4,17 @@ from django.conf import settings
 import redis
 import json
 from channels import Group
+from datetime import datetime, timedelta
 
 from .serializers import (
-	EventsSerializer
+	EventsSerializer,
+	DashboardSerializer
 	)
 
 from processing.models import Event
+from core.redisapp import redis
+from django.core.serializers.json import DjangoJSONEncoder
+
 
 
 class SummaryView(GenericAPIView):
@@ -34,7 +39,7 @@ class EventsView(GenericAPIView):
 
 	def get(self, request, *args, **kwargs):
 
-		return Response(serializer_class(
+		return HttpResponse(self.serializer_class(
 			Event.objects.filter(request.GET.get('username')),
 			many=True)
 		)
@@ -45,3 +50,18 @@ class EventsView(GenericAPIView):
 	    })
 
 		return HttpResponse("Event has been stored.")
+
+
+class DashboardView(GenericAPIView):
+	serializer_class = DashboardSerializer
+	
+	def get(self, request, *args, **kwargs):
+
+		last_day = datetime.now() - timedelta(days=1)
+		# get events from the last day
+		events = (Event.objects.filter(date__lte=last_day)
+			.values('date', 'event_type'))
+		
+		return HttpResponse(json.dumps(list(events), cls=DjangoJSONEncoder))
+
+

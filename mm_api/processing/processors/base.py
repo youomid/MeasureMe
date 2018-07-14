@@ -24,8 +24,6 @@ class BaseProcessor(object):
 		return self.event["eventType"] in self.processor_for_events
 
 	def process_message(self):
-		print 'Received event: %s' % self.event
-
 		process_event.delay(self.event)
 
 	def process(self):

@@ -8,6 +8,8 @@ class Bucket(RedisDictModel):
 		'pws': 0,
 		'daily_c': 0,
 		'comp_bs': 0,
+		'earned_bp': 0,
+		'consumed_bp': 0
 	}
 
 	def __init__(self, redis_id):
@@ -66,10 +68,12 @@ class DataStoreService(object):
 
 		if event.get("eventType") == "WorkSessionCompletedEvent":
 			bucket.increment('comp_ws', 1)
+			bucket.increment('earned_bp', 200)
 		elif event.get("eventType") == "WorkSessionPausedEvent":
 			bucket.increment('pws', 1)
 		elif event.get("eventType") == "WorkSessionResetEvent":
 			bucket.increment('incomp_ws', 1)
+			bucket.increment('consumed_bp', -400)
 		elif event.get("eventType") == "BreakSessionCompletedEvent":
 			bucket.increment('comp_bs', 1)
 		elif event.get("eventType") == "DailyGoalCompletedEvent":

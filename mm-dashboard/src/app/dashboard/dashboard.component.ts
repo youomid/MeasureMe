@@ -86,4 +86,8 @@ export class DashboardComponent implements OnInit {
     this._api.postEvent("0 minutes ago", "Test Event", "Test Description")
   }
 
+  getDashboard(){
+    this._api.getDashboard()
+  }
+
 }
