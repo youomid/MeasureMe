@@ -3,6 +3,7 @@ from processing.processors.base import BaseProcessor
 
 
 import pika
+import importlib
 
 def import_string(module_class_string):
     """

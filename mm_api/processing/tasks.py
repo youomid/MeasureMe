@@ -13,24 +13,24 @@ import requests
 from core.celeryapp import app as celery
 from core.redisapp import redis
 from processing.models import Event
+from processing.buckets import DataStoreService
 
 
 @celery.task
 def process_event(event):
 
-  event_dict = json.loads(event)
-
+	print 'received event', event
 	Group("events").send({
 		"text": event
 	})
 
-  Event.objects.get_or_create(
-    user_name=event_dict["user"],
-    date=datetime.utcfromtimestamp(event_dict["date"]),
-    event_type=event_dict["eventType"],
-    event_info=event_dict["eventInfo"]
-    )
+	Event.objects.get_or_create(
+		user_name=event["user"],
+		date=datetime.utcfromtimestamp(event["date"]/1000),
+		event_type=event["eventType"],
+		event_info=event.get("eventInfo", {})
+		)
 
-  # TODO: Process data and store in redis buckets
-  
+	# update statistics
+	DataStoreService().update_buckets(event)
 

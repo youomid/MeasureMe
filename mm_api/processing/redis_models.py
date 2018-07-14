@@ -1,16 +1,16 @@
 from core.redisapp import redis
+import json
 
 
-class RedisModel(object):
-    """
-    This is a base redis model class. is used to represent redis key as object.
-    """
+class RedisDictModel(object):
     _db = redis
     expires = None
+    default = {}
 
-    def __init__(self, _id):
-        self.id = _id
+    def __init__(self, redis_id, *args, **kwargs):
+        self.id = redis_id
         self.key = '%s:%s' % (self.__class__.__name__, self.id)
+        self._data = None
 
     def exist(self):
         """
@@ -18,47 +18,31 @@ class RedisModel(object):
         """
         return self._db.exists(self.key)
 
-    def delete(self):
-        self._db.delete(self.key)
-
     def __hash__(self):
         return hash(self.id)
 
-
-class RedisDictModel(RedisModel):
-
-    default = {}
-
-    def __init__(self, name, *args, **kwargs):
-        super(RedisDictModel, self).__init__(name, *args, **kwargs)
-        self._data = None
-
     def __setitem__(self, key, value):
         if value is None:
-            self.db.hdel(self.key, key)
+            self._db.hdel(self.key, key)
             return
         try:
             value = int(value)
         except Exception:
             pass
         old_val = self.get(key)
-        self.db.hset(self.key, key, json.dumps(value))
+        self._db.hset(self.key, key, json.dumps(value))
         if self._data is not None:
             self._data[key] = value
-
-        if key in self.attribute_change_hooks.keys():
-            getattr(self, self.attribute_change_hooks[key])(key, value, old_val)
 
     def increment(self, key, val):
         """
         Increment a value under a `key` by `val`
         """
-        if self._pipeline is not None:
-            self._data[key] += int(val)
-        self.db.hincrby(self.key, key, val)
+
+        self._db.hincrby(self.key, key, val)
 
     def __delitem__(self, key):
-        self.db.hdel(self.key, key)
+        self._db.hdel(self.key, key)
 
     def __getitem__(self, key):
         value = self._data.get(key) if self._data else self._db.hget(self.key, key)
@@ -79,7 +63,7 @@ class RedisDictModel(RedisModel):
 
     def get(self, key, default=None):
         """
-        Returns a value under key ot None
+        Returns a value under key or None
         """
         try:
             return self.__getitem__(key)
