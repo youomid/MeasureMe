@@ -1,64 +1,68 @@
 <section style="width:100vw;">
-	<div style="margin: 1vh 3vw 3vh 3vw;font-size: 2em">
-		Dashboard
-	</div>
-
 	<div class="row">
 	  <div class="col-md-5">
-	  	<canvas id="myChart" width="400" height="250">{{ chart }}</canvas>
+	  	<section>
+				<h4 style="border-bottom: 1px solid #e5e5e5;">Monthly History</h4>
+				Graph showing your productivity for the past month. 
+				<div style="padding-top:15px;">
+			  	<canvas id="myChart" width="400" height="250">{{ chart }}</canvas>
+			  </div>
+		  </section>
 	  </div>
 	  <div class="col-md-7">
 	  	<section>
-	  		Events Feed
-		    <div class="feed-entry" *ngFor="let event of events">
-		      <span class="pull-right text-muted">{{event['date']}}</span>
-		      <i class="fa text-muted"></i>
-		      	{{event['title']}}
-		      <small class="meta text-muted">
-		        {{event['description']}}
-		      </small>
-		    </div>
+	  		<h4 style="border-bottom: 1px solid #e5e5e5;">Events</h4>
+	  		A realtime feed of events in the past 24 hours.
+	  		<div style="padding-top:15px;">
+			    <div class="feed-entry" *ngFor="let event of events">
+			      <span class="text-muted">{{event['date']}} - </span>
+			      <i class="text-muted"></i>
+			      	{{event['title']}}
+			      <small class="meta text-muted">
+			        {{event['description']}}
+			      </small>
+			    </div>
+			   </div>
 		  </section>
-		  <section style="margin-top:3vh">
-			  <button style="width:25%" type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Add Event </button>
-			  <button style="width:25%" type="button" (click)="getDashboard()" class="btn btn-primary btn-block"> Complete Work Session </button>
-			  <button style="width:25%" type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Incomplete Work Session </button>
-			</section>
 	  </div>
 	</div>
 	<div class="row" style="margin-top:3vh">
+		<div class="col-md-5" style="padding-right:125px;">
+			<section>
+				<h4 style="border-bottom: 1px solid #e5e5e5;">Daily History</h4>
+				Historical data showing your productivity for the past 24 hours.
+				<div style="padding-top:15px;">
+					<table class="table">
+					    <thead class="mdb-color darken-3">
+					        <tr class="text-white">
+					            <th *ngFor="let name of columnNames">{{name}}</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        <tr *ngFor="let values of columnValues">
+					            <td *ngFor="let val of values">{{val}}</td>
+					        </tr>
+					    </tbody>
+					</table>
+				</div>
+			</section>
+		</div>
 		<div class="col-md-5">
-			<table class="table">
-			    <thead class="mdb-color darken-3">
-			        <tr class="text-white">
-			            <th>#</th>
-			            <th>First Name</th>
-			            <th>Last Name</th>
-			            <th>Username</th>
-			        </tr>
-			    </thead>
-
-			    <tbody>
-			        <tr>
-			            <th scope="row">1</th>
-			            <td>Mark</td>
-			            <td>Otto</td>
-			            <td>@mdo</td>
-			        </tr>
-			        <tr>
-			            <th scope="row">2</th>
-			            <td>Jacob</td>
-			            <td>Thornton</td>
-			            <td>@fat</td>
-			        </tr>
-			        <tr>
-			            <th scope="row">3</th>
-			            <td>Larry</td>
-			            <td>the Bird</td>
-			            <td>@twitter</td>
-			        </tr>
-			    </tbody>
-			</table>
+			<section>
+				<h4 style="border-bottom: 1px solid #e5e5e5;">Simulation</h4>
+				Simulate different scenarios using the buttons below.
+				<div class="row" style="padding-top:15px;">
+					<div class="col-md-4">
+					  <button type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Add Event </button>
+					</div>
+					<div class="col-md-4">
+					  <button type="button" (click)="getDashboard()" class="btn btn-primary btn-block"> Complete Work Session </button>
+					</div>
+					<div class="col-md-4">
+					  <button type="button" (click)="sendMessage()" class="btn btn-primary btn-block"> Incomplete Work Session </button>
+					</div>
+				</div>
+			</section>
 		</div>
 	</div>
 </section>
