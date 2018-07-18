@@ -3,14 +3,21 @@
 
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <span style="font-size: 1.8em;letter-spacing: 0.08em;text-transform:uppercase;color: #6e84a3;" (click)="goToDashboard()">
-                        MeasureMe
-                    </span>
+                <li class="sidebar-brand row" style="height:7.5vh;">
+                    <div class="col-md-2">
+                        <img src="assets/logo.png" height="42" width="42" alt="logo"/>
+                    </div>
+                    <div class="col-md-6">
+                        <span style="font-size: 1.4em;color:#298ccb;display:initial;" (click)="goToDashboard()">
+                            MeasureMe
+                        </span>
+                    </div>
                 </li>
+                <hr style="border-color: #298ccb;margin:0;"/>
                 <li>
-                    <span style="padding-right: 3vw;text-align:center;font-size: 1.2em;letter-spacing: 0.08em;text-transform:uppercase;color: #6e84a3!important;" (click)="goToDashboard()">Dashboard</span>
+                    <span style="padding-right: 3vw;text-align:center;color: #298ccb;cursor: pointer;" (click)="goToDashboard()">Dashboard</span>
                 </li>
+                <hr style="border-color: #298ccb;margin:0;"/>
             </ul>
         </div>
 

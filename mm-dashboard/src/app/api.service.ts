@@ -49,4 +49,20 @@ export class APIService {
       );
   }
 
+  simulateCompleteWorkSession() {
+
+  }
+
+  simulateInCompleteWorkSession() {
+
+  }
+
+  simulatePausedWorkSession() {
+
+  }
+
+  simulateDailyComplete() {
+
+  }
+
 }

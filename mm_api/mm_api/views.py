@@ -52,7 +52,8 @@ class DashboardView(GenericAPIView):
 	def get(self, request, *args, **kwargs):
 		return HttpResponse({
 				'events': self.get_events(),
-				'table': self.get_table()
+				'daily_history': self.get_daily_history(),
+				'monthly_history': self.get_monthly_history()
 			})
 
 	def get_events(self):
@@ -62,7 +63,13 @@ class DashboardView(GenericAPIView):
 			.values('date', 'event_type'))
 		return json.dumps(list(events), cls=DjangoJSONEncoder)
 
-	def get_table(self):
+	def get_daily_history(self):
+		
+		pass
+
+	def get_monthly_history(self):
+		
+		pass
 		
 
 

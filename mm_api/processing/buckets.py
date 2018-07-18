@@ -1,5 +1,6 @@
 from processing.redis_models import RedisDictModel
 from datetime import datetime
+import calendar
 
 class Bucket(RedisDictModel):
 	default = {
@@ -21,31 +22,77 @@ class HourlyBucket(Bucket):
 		super(HourlyBucket, self).__init__(redis_id)
 
 
+class MonthlyBucket(Bucket):
+	def __init__(self, redis_id):
+		super(MonthlyBucket, self).__init__(redis_id)
+
+
 class DataStoreService(object):
 
 	bucket_types = [
-		HourlyBucket
+		(HourlyBucket, 'hour'),
+		(DailyBucket, 'day'),
+		(MonthlyBucket, 'month')
 	]
 
-	def get_times(self, time):
+	def get_buckets_past_day(self, start_time, end_time):
 		"""
-		Use the event time to get the start and end of the hour.
+		Retrieves hourly buckets for the past day.
+		"""
+		pass
+
+
+	def get_buckets_past_month(self, start_time, end_time):
+		"""
+		Retrieves daily buckets for the past month.
+		"""
+		pass
+
+
+	def get_times(self, time, bucket_length):
+		"""
+		Use the event time to get the start and end of the period.
 		"""
 
 		dt = datetime.utcfromtimestamp(time/1000.0)
-		# round down to nearest hour
-		dt = dt.replace(minute=0,second=0,microsecond=0)
 
-		# convert to milliseconds
-		start_time = (dt - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+		if bucket_length == "hour":
+			# round down to nearest hour
+			dt = dt.replace(minute=0,second=0,microsecond=0)
 
-		dt = dt.replace(minute=59,second=59,microsecond=999999)
+			# convert to milliseconds
+			start_time = (dt - datetime.utcfromtimestamp(0)).total_seconds() * 1000
 
-		end_time = (dt - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+			dt = dt.replace(minute=59,second=59,microsecond=999999)
+
+			end_time = (dt - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+
+		elif bucket_length == "day":
+			# round down to nearest day
+			dt = dt.replace(hour=0,minute=0,second=0,microsecond=0)
+
+			# convert to milliseconds
+			start_time = (dt - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+
+			dt = dt.replace(hour=23,minute=59,second=59,microsecond=999999)
+
+			end_time = (dt - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+
+		elif bucket_length == "month":
+			# round down to nearest month
+			dt = dt.replace(day=1,minute=0,second=0,microsecond=0)
+
+			# convert to milliseconds
+			start_time = (dt - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+
+			dt = dt.replace(day=dt.month,minute=59,second=59,microsecond=999999)
+
+			end_time = (dt - datetime.utcfromtimestamp(0)).total_seconds() * 1000
 
 		return start_time, end_time
 
-	def generate_bucket_name(self, event):
+
+	def generate_bucket_name(self, event, bucket_length):
 		"""
 		Create a unique id that is used for redis keys.
 
@@ -53,12 +100,12 @@ class DataStoreService(object):
 			Example: "HourlyBucket:guest|1531584000000|1531587599999"
 
 		"""
-		start_time, end_time = self.get_times(event.get("date"))
+		start_time, end_time = self.get_times(event.get("date"), bucket_length)
 		return "%s|%d|%d" % (event.get("user"), start_time, end_time)
 
 	def update_buckets(self, event):
 		for bucket_type in self.bucket_types:
-			bucket = bucket_type(self.generate_bucket_name(event))
+			bucket = bucket_type[0](self.generate_bucket_name(event), bucket_type[1])
 			self.update_stats(bucket, event)
 
 	def update_stats(self, bucket, event):

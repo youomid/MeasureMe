@@ -20,12 +20,18 @@ from mm_api.views import (
         DashboardView,
         EventsView
 	)
+from rest_framework.routers import DefaultRouter
 
 
-urlpatterns = [
+router = DefaultRouter()
+router.register(r'simulations', SimulationViewSet, base_name='simulations')
+urlpatterns = router.urls
+
+urlpatterns += [
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^summary/', SummaryView.as_view()),
     url(r'^dashboard/', DashboardView.as_view()),
     url(r'^events/', EventsView.as_view()),
 ]
+

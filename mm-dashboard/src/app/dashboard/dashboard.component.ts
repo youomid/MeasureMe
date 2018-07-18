@@ -92,4 +92,21 @@ export class DashboardComponent implements OnInit {
     this._api.getDashboard()
   }
 
+  simulateCompleteWorkSession(){
+    this._api.simulateCompleteWorkSession()
+  }
+
+  simulateInCompleteWorkSession(){
+    this._api.simulateInCompleteWorkSession()
+  }
+
+  simulatePausedWorkSession(){
+    this._api.simulatePausedWorkSession()
+  }
+
+  simulateDailyComplete(){
+    this._api.simulateDailyComplete()
+  }
+
+
 }
