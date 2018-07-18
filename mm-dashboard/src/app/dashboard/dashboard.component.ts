@@ -13,6 +13,8 @@ export class DashboardComponent implements OnInit {
   chart = []; 
   socket = new WebSocket("ws://" + 'localhost:8000' + "/events/");
   events = [];
+  columnNames = ["Date", "Complete Work Sessions", "Incomplete Work Sessions", "Paused Work Sessions", "Daily Complete", "Complete Break Session", "Earned Break Points", "Consumed Break Points"]
+  columnValues = [["July 17th, 2018", 6,2,1,1,3,700,150],["July 18th, 2018", 6,2,1,1,3,700,150],["July 19th, 2018", 6,2,1,1,3,700,150]]
 
   constructor(private _api: APIService) { }
 
