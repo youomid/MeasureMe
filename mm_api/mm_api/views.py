@@ -20,13 +20,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 class SummaryView(GenericAPIView):
 
 	def get(self, request, *args, **kwargs):
-		# r = redis.StrictRedis(
-		# 	host=settings.REDIS_DATASTORE['host'],
-		# 	port=settings.REDIS_DATASTORE['port'],
-		# 	db=settings.REDIS_DATASTORE['db']
-		# )
 
-		# return HttpResponse(r.get("test"))
 		Group("events").send({
 	        "text": "Message from summary view",
 	    })
@@ -56,12 +50,23 @@ class DashboardView(GenericAPIView):
 	serializer_class = DashboardSerializer
 	
 	def get(self, request, *args, **kwargs):
+		return HttpResponse({
+				'events': self.get_events(),
+				'table': self.get_table()
+			})
 
+	def get_events(self):
 		last_day = datetime.now() - timedelta(days=1)
 		# get events from the last day
-		events = (Event.objects.filter(date__lte=last_day)
+		events = (Event.objects.filter(date__gte=last_day)
 			.values('date', 'event_type'))
+		return json.dumps(list(events), cls=DjangoJSONEncoder)
+
+	def get_table(self):
 		
-		return HttpResponse(json.dumps(list(events), cls=DjangoJSONEncoder))
+
+
+
+
 
 
