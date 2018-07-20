@@ -20,5 +20,23 @@ class BucketsMixin(object):
 		return aggregated_data
 
 
+	def convert_buckets_to_dict(self, buckets):
+		"""
+		Convert bucket objects to dictionary and include their start and end time.
+		"""
+
+		dict_buckets = []
+
+		for period in buckets:
+			temp_dict = period.default
+			temp_dict['start_time'] = period.start_time
+			temp_dict['end_time'] = period.end_time
+			dict_buckets.append(temp_dict)
+
+		return dict_buckets
+
+
+
+
 
 

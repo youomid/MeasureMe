@@ -16,6 +16,14 @@ class Bucket(RedisDictModel):
 	def __init__(self, redis_id):
 		super(Bucket, self).__init__(redis_id)
 
+	@property
+	def start_time(self):
+		return int(self.id.split("|")[1])
+
+	@property
+	def end_time(self):
+		return int(self.id.split("|")[2])
+
 
 class HourlyBucket(Bucket):
 	def __init__(self, redis_id):

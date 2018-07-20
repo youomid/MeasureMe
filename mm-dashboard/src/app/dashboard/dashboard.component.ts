@@ -13,8 +13,24 @@ export class DashboardComponent implements OnInit {
   chart = []; 
   socket = new WebSocket("ws://" + 'localhost:8000' + "/events/");
   events = [];
-  columnNames = ["Date", "Complete Work Sessions", "Incomplete Work Sessions", "Paused Work Sessions", "Daily Complete", "Complete Break Session", "Earned Break Points", "Consumed Break Points"]
-  columnValues = [["July 17th, 2018", 6,2,1,1,3,700,150],["July 18th, 2018", 6,2,1,1,3,700,150],["July 19th, 2018", 6,2,1,1,3,700,150]]
+  columnIds = [
+    'start_time', 'end_time', 'comp_ws', 'incomp_ws',
+    'pws', 'daily_c', 'comp_bs', 'earned_bp', 'consumed_bp'
+    ]
+  columnNames = {
+    "start_time":"Start Time",
+    "end_time":"End Time",
+    "comp_ws":"Complete Work Sessions",
+    "incomp_ws":"Incomplete Work Sessions",
+    "pws":"Paused Work Sessions",
+    "daily_c":"Daily Complete",
+    "comp_bs":"Complete Break Session",
+    "earned_bp":"Earned Break Points",
+    "consumed_bp":"Consumed Break Points"
+    }
+
+    daily_history = []
+    monthly_history = []
 
   constructor(private _api: APIService) { }
 
@@ -82,6 +98,7 @@ export class DashboardComponent implements OnInit {
         {'date': '15 Minutes Ago', 'title': 'Paused work session', 'description': 'Studying for finals'},
         {'date': '2 Minutes Ago', 'title': 'Finished work session', 'description': 'Studying for finals'},
       ]
+
       this.getDashboard()
 
   }
@@ -92,6 +109,17 @@ export class DashboardComponent implements OnInit {
 
   getDashboard(){
     this._api.getDashboard()
+      .subscribe(
+          res => {
+            console.log(res);
+            this.daily_history = res['daily_history']
+            this.monthly_history = res['monthly_history']
+            // this.events = res.events
+          },
+          err => {
+            console.log("Error occured", err);
+          }
+        );
   }
 
   simulateCompleteWorkSession(){

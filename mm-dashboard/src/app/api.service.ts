@@ -38,15 +38,8 @@ export class APIService {
     var headers = new HttpHeaders()
         .set('Authorization', 'Token ' + this._auth.getToken());
 
-    this._http.get("http://localhost:8000/dashboard/", {headers:headers})
-      .subscribe(
-          res => {
-            console.log(res);
-          },
-          err => {
-            console.log("Error occured", err);
-          }
-      );
+    return this._http.get("http://localhost:8000/dashboard/", {headers:headers})
+
   }
 
   simulateCompleteWorkSession() {

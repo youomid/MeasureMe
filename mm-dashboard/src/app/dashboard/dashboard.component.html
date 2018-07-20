@@ -2,14 +2,14 @@
 	<div class="row">
 	  <div class="col-md-5">
 	  	<section>
-				<h4 style="border-bottom: 1px solid #e5e5e5;">Monthly History</h4>
-				Graph showing your productivity for the past month. 
-				<div style="padding-top:15px;">
-			  	<canvas id="myChart" width="400" height="250">{{ chart }}</canvas>
-			  </div>
-		  </section>
+			<h4 style="border-bottom: 1px solid #e5e5e5;">Monthly History</h4>
+			Graph showing your productivity for the past month. 
+			<div style="padding-top:15px;">
+		  	<canvas id="myChart" width="400" height="250">{{ chart }}</canvas>
+		  </div>
+	    </section>
 	  </div>
-	  <div class="col-md-7">
+	  <div class="col-md-5">
 	  	<section>
 	  		<h4 style="border-bottom: 1px solid #e5e5e5;">Events</h4>
 	  		A realtime feed of events in the past 24 hours.
@@ -24,10 +24,30 @@
 			    </div>
 			   </div>
 		  </section>
+		  <section style="margin-top:3vh">
+				<h4 style="border-bottom: 1px solid #e5e5e5;">Simulation</h4>
+				Simulate different scenarios using the buttons below.
+				<div class="row" style="padding-top:15px;">
+					<div class="col-md-4">
+					  <button type="button" (click)="simulateCompleteWorkSession()" class="btn btn-primary btn-block" style="font-size: 0.7em;"> Complete Work Session </button>
+					</div>
+					<div class="col-md-4">
+					  <button type="button" (click)="simulateInCompleteWorkSession()" class="btn btn-primary btn-block" style="font-size: 0.7em;"> Incomplete Work Session </button>
+					</div>
+				</div>
+				<div class="row" style="padding-top:15px;">
+					<div class="col-md-4">
+					  <button type="button" (click)="simulatePausedWorkSession()" class="btn btn-primary btn-block" style="font-size: 0.7em;"> Paused Work Session </button>
+					</div>
+					<div class="col-md-4">
+					  <button type="button" (click)="simulateDailyComplete()" class="btn btn-primary btn-block" style="font-size: 0.7em;"> Daily Complete </button>
+					</div>
+				</div>
+			</section>
 	  </div>
 	</div>
 	<div class="row" style="margin-top:3vh">
-		<div class="col-md-5" style="padding-right:125px;">
+		<div class="col-md-10" style="padding-right:125px;">
 			<section>
 				<h4 style="border-bottom: 1px solid #e5e5e5;">Daily History</h4>
 				Historical data showing your productivity for the past 24 hours.
@@ -35,35 +55,15 @@
 					<table class="table">
 					    <thead class="mdb-color darken-3">
 					        <tr class="text-white">
-					            <th *ngFor="let name of columnNames">{{name}}</th>
+					            <th *ngFor="let id of columnIds">{{columnNames[id]}}</th>
 					        </tr>
 					    </thead>
 					    <tbody>
-					        <tr *ngFor="let values of columnValues">
-					            <td *ngFor="let val of values">{{val}}</td>
+					        <tr *ngFor="let row of daily_history">
+					            <td *ngFor="let id of columnIds">{{row[id]}}</td>
 					        </tr>
 					    </tbody>
 					</table>
-				</div>
-			</section>
-		</div>
-		<div class="col-md-5">
-			<section>
-				<h4 style="border-bottom: 1px solid #e5e5e5;">Simulation</h4>
-				Simulate different scenarios using the buttons below.
-				<div class="row" style="padding-top:15px;">
-					<div class="col-md-3">
-					  <button type="button" (click)="simulateCompleteWorkSession()" class="btn btn-primary btn-block" style="font-size: 0.7em;"> Complete Work Session </button>
-					</div>
-					<div class="col-md-3">
-					  <button type="button" (click)="simulateInCompleteWorkSession()" class="btn btn-primary btn-block" style="font-size: 0.7em;"> Incomplete Work Session </button>
-					</div>
-					<div class="col-md-3">
-					  <button type="button" (click)="simulatePausedWorkSession()" class="btn btn-primary btn-block" style="font-size: 0.7em;"> Paused Work Session </button>
-					</div>
-					<div class="col-md-3">
-					  <button type="button" (click)="simulateDailyComplete()" class="btn btn-primary btn-block" style="font-size: 0.7em;"> Daily Complete </button>
-					</div>
 				</div>
 			</section>
 		</div>

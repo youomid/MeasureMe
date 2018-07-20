@@ -1,5 +1,6 @@
 from rest_framework.generics import GenericAPIView
 from django.http import HttpResponse
+from rest_framework.response import Response
 from django.conf import settings
 import redis
 import json
@@ -49,8 +50,7 @@ class EventsView(GenericAPIView):
 		return HttpResponse("Event has been stored.")
 
 
-class DashboardView(GenericAPIView):
-	serializer_class = DashboardSerializer
+class DashboardView(GenericAPIView, BucketsMixin):
 	metrics = [
 		'comp_ws', 'incomp_ws', 'pws', 'daily_c',
 		'comp_bs', 'earned_bp', 'consumed_bp'
@@ -58,7 +58,7 @@ class DashboardView(GenericAPIView):
 	
 	def get(self, request, *args, **kwargs):
 		user_name = request.user.get_username()
-		return HttpResponse({
+		return Response({
 				'events': self.get_events(user_name),
 				'daily_history': self.get_daily_history(user_name),
 				'monthly_history': self.get_monthly_history(user_name)
@@ -73,12 +73,11 @@ class DashboardView(GenericAPIView):
 
 	def get_daily_history(self, user):
 		buckets = DataStoreService().get_buckets_past_day(user)
-		return map(lambda x: x.default, buckets)
-
+		return self.convert_buckets_to_dict(buckets)
 
 	def get_monthly_history(self, user):
 		buckets = DataStoreService().get_buckets_current_month(user)	
-		return map(lambda x: x.default, buckets)
+		return self.convert_buckets_to_dict(buckets)
 
 
 
