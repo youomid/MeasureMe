@@ -14,6 +14,9 @@ from .serializers import (
 from processing.models import Event
 from core.redisapp import redis
 from django.core.serializers.json import DjangoJSONEncoder
+from processing.buckets import DataStoreService
+
+from .mixin import BucketsMixin
 
 
 
@@ -48,29 +51,34 @@ class EventsView(GenericAPIView):
 
 class DashboardView(GenericAPIView):
 	serializer_class = DashboardSerializer
+	metrics = [
+		'comp_ws', 'incomp_ws', 'pws', 'daily_c',
+		'comp_bs', 'earned_bp', 'consumed_bp'
+		]
 	
 	def get(self, request, *args, **kwargs):
+		user_name = request.user.get_username()
 		return HttpResponse({
-				'events': self.get_events(),
-				'daily_history': self.get_daily_history(),
-				'monthly_history': self.get_monthly_history()
+				'events': self.get_events(user_name),
+				'daily_history': self.get_daily_history(user_name),
+				'monthly_history': self.get_monthly_history(user_name)
 			})
 
-	def get_events(self):
+	def get_events(self, user):
 		last_day = datetime.now() - timedelta(days=1)
 		# get events from the last day
-		events = (Event.objects.filter(date__gte=last_day)
+		events = (Event.objects.filter(user_name=user,date__gte=last_day)
 			.values('date', 'event_type'))
 		return json.dumps(list(events), cls=DjangoJSONEncoder)
 
-	def get_daily_history(self):
-		
-		pass
+	def get_daily_history(self, user):
+		buckets = DataStoreService().get_buckets_past_day(user)
+		return map(lambda x: x.default, buckets)
 
-	def get_monthly_history(self):
-		
-		pass
-		
+
+	def get_monthly_history(self, user):
+		buckets = DataStoreService().get_buckets_current_month(user)	
+		return map(lambda x: x.default, buckets)
 
 
 

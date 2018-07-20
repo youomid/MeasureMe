@@ -22,6 +22,11 @@ class HourlyBucket(Bucket):
 		super(HourlyBucket, self).__init__(redis_id)
 
 
+class DailyBucket(Bucket):
+	def __init__(self, redis_id):
+		super(DailyBucket, self).__init__(redis_id)
+
+
 class MonthlyBucket(Bucket):
 	def __init__(self, redis_id):
 		super(MonthlyBucket, self).__init__(redis_id)
@@ -35,18 +40,56 @@ class DataStoreService(object):
 		(MonthlyBucket, 'month')
 	]
 
-	def get_buckets_past_day(self, start_time, end_time):
+	def get_buckets_past_day(self, user):
 		"""
 		Retrieves hourly buckets for the past day.
 		"""
-		pass
+		
+		now = datetime.now()
+
+		period_start = now.replace(minute=0,second=0,microsecond=0)
+		period_end = now.replace(minute=59,second=59,microsecond=999999)
+
+		buckets = []
+
+		for i in range(24):
+			# convert to milliseconds
+			start_time = (period_start - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+			end_time = (period_end - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+
+			buckets.append(HourlyBucket("%s|%d|%d" % (user, start_time, end_time)))
+
+			new_hour = (now.hour - 1) % 24
+
+			period_start = now.replace(hour=new_hour)
+			period_end = now.replace(hour=new_hour)
+
+		return buckets
 
 
-	def get_buckets_past_month(self, start_time, end_time):
+	def get_buckets_current_month(self, user):
 		"""
-		Retrieves daily buckets for the past month.
+		Retrieves daily buckets for the current month.
 		"""
-		pass
+
+		now = datetime.now()
+
+		period_start = now.replace(hour=0,minute=0,second=0,microsecond=0)
+		period_end = now.replace(hour=23,minute=59,second=59,microsecond=999999)
+
+		buckets = []
+
+		for i in range(now.day):
+			# convert to milliseconds
+			start_time = (now - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+			end_time = (now - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+
+			buckets.append(DailyBucket("%s|%d|%d" % (user, start_time, end_time)))
+
+			period_start = now.replace(day=now.day - 1)
+			period_end = now.replace(day=now.day - 1)
+
+		return buckets
 
 
 	def get_times(self, time, bucket_length):

@@ -82,6 +82,8 @@ export class DashboardComponent implements OnInit {
         {'date': '15 Minutes Ago', 'title': 'Paused work session', 'description': 'Studying for finals'},
         {'date': '2 Minutes Ago', 'title': 'Finished work session', 'description': 'Studying for finals'},
       ]
+      this.getDashboard()
+
   }
 
   sendMessage(){

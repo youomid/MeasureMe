@@ -21,6 +21,7 @@ from mm_api.views import (
         EventsView
 	)
 from rest_framework.routers import DefaultRouter
+from mm_api.viewsets import SimulationViewSet
 
 
 router = DefaultRouter()
