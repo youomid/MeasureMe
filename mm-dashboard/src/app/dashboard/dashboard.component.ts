@@ -51,10 +51,6 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  sendMessage(){
-    this._api.postEvent("0 minutes ago", "Test Event", "Test Description")
-  }
-
   loadChart(){
     var ctx = document.getElementById("myChart");
     var chartData = {
@@ -63,43 +59,43 @@ export class DashboardComponent implements OnInit {
           labels: this.monthly_history['start_time'],
           datasets: [
             { 
-              label: "Complete Work Sessions"
+              label: "Complete Work Sessions",
               data: this.monthly_history['comp_ws'],
               borderColor: "#3cba9f",
               fill: false
             },
             { 
-              label: "Inomplete Work Sessions"
+              label: "Inomplete Work Sessions",
               data: this.monthly_history['incomp_ws'],
               borderColor: "#ffcc00",
               fill: false
             },
             { 
-              label: "Paused Work Sessions"
+              label: "Paused Work Sessions",
               data: this.monthly_history['incomp_ws'],
               borderColor: "#e55a76",
               fill: false
             },
             { 
-              label: "Daily Complete"
+              label: "Daily Complete",
               data: this.monthly_history['daily_c'],
               borderColor: "#c39797",
               fill: false
             },
             { 
-              label: "Complete Break Session"
+              label: "Complete Break Session",
               data: this.monthly_history['comp_bs'],
               borderColor: "#cc0000",
               fill: false
             },
             { 
-              label: "Earned Break Points"
+              label: "Earned Break Points",
               data: this.monthly_history['earned_bp'],
               borderColor: "#c71585",
               fill: false
             },
             { 
-              label: "Consumed Break Points"
+              label: "Consumed Break Points",
               data: this.monthly_history['consumed_bp'],
               borderColor: "#e6e6fa",
               fill: false
@@ -132,7 +128,7 @@ export class DashboardComponent implements OnInit {
             console.log(res);
             this.daily_history = res['daily_history']
             this.monthly_history = res['monthly_history']
-            this.events = res.events
+            this.events = res['events']
             this.loadChart()
           },
           err => {

@@ -1,11 +1,11 @@
 version: "3"
 services:
-  # mm_dashboard:
-  #   image: mm-dashboard
-  #   ports:
-  #     - "4200:4200"
-  #   networks:
-  #     - webnet
+  mm_dashboard:
+    image: mm-dashboard
+    ports:
+      - "4200:4200"
+    networks:
+      - webnet
   postgres:
     image: postgres:latest
     ports:
@@ -19,22 +19,22 @@ services:
     command: redis-server
     networks:
       - webnet
-  # interfaceserver:
-  #   image: interfaceserver
-  #   ports:
-  #     - "8000:8000"
-  #   networks:
-  #     - webnet
-  #   depends_on:
-  #     - redis
-  #     - postgres
-  # workerserver:
-  #   image: workerserver
-  #   networks:
-  #     - webnet
-  #   depends_on:
-  #     - redis
-  #     - postgres
+  interfaceserver:
+    image: interfaceserver
+    ports:
+      - "8000:8000"
+    networks:
+      - webnet
+    depends_on:
+      - redis
+      - postgres
+  workerserver:
+    image: workerserver
+    networks:
+      - webnet
+    depends_on:
+      - redis
+      - postgres
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -42,29 +42,37 @@ services:
       - "5673:5672"
     networks:
       - webnet
-  # subscribe_events:
-  #   image: subscribe_events
-  #   depends_on:
-  #     - rabbitmq
-  #   networks:
-  #     - webnet
-  #   deploy:
-  #     replicas: 1
-  #     resources:
-  #       limits:
-  #         cpus: '0.1'
-  #         # memory: 50M
-  # celery_workers:
-  #   image: celery_workers
-  #   depends_on:
-  #     - rabbitmq
-  #   networks:
-  #     - webnet
-  #   deploy:
-  #     replicas: 1
-  #     resources:
-  #       limits:
-  #         cpus: '0.1'
-  #         # memory: 50M
+  subscribe_events:
+    image: subscribe_events
+    depends_on:
+      - rabbitmq
+    networks:
+      - webnet
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          # memory: 50M
+  celery_workers:
+    image: celery_workers
+    depends_on:
+      - rabbitmq
+    networks:
+      - webnet
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          # memory: 50M
+  event_source:
+    image: event_source
+    ports:
+      - "6470:6470"
+    networks:
+      - webnet
+    deploy:
+      replicas: 1
 networks:
   webnet:
