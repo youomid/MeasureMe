@@ -248,7 +248,7 @@ func simulate(sim_type string){
 }
 
 func publish_events(events []map[string]interface{}){
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5673/")
+	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
 	failOnError(err, "Failed to dial RMQ")
 
 	channel, err = conn.Channel()
@@ -286,7 +286,7 @@ func start_server(){
 	h := requestHandler
 	go func() {
 		fmt.Printf("Server started\n")
-		if err := fasthttp.ListenAndServe("127.0.0.1:6470", h); err != nil {
+		if err := fasthttp.ListenAndServe(":6470", h); err != nil {
 			fmt.Sprintf("Error in ListenAndServe: %s", err)
 		}
 	}()
