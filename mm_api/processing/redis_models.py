@@ -1,5 +1,6 @@
 from core.redisapp import redis
 import json
+import copy
 
 
 class RedisDictModel(object):

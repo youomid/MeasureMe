@@ -72,12 +72,12 @@ class DashboardView(GenericAPIView, BucketsMixin):
 		return json.dumps(list(events), cls=DjangoJSONEncoder)
 
 	def get_daily_history(self, user):
-		buckets = DataStoreService().get_buckets_past_day(user)
+		buckets = DataStoreService().get_buckets_current_day(user)
 		return self.convert_buckets_to_dict(buckets)
 
 	def get_monthly_history(self, user):
 		buckets = DataStoreService().get_buckets_current_month(user)	
-		return self.convert_buckets_to_dict(buckets)
+		return self.generate_bucket_lists(buckets)
 
 
 

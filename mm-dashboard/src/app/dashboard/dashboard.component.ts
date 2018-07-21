@@ -37,52 +37,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
   	var res = this._api.testData()
 
-    let temp_max = res['list'].map(res => res.main.temp_max);
-  	let temp_min = res['list'].map(res => res.main.temp_min);
-  	let alldates = res['list'].map(res => res.dt);
-
-  	let weatherDates = []
-  	
-  	alldates.forEach((res) => {
-  	    let jsdate = new Date(res * 1000)
-  	    weatherDates.push(jsdate.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' }))
-  	})
-
-  	var ctx = document.getElementById("myChart");
-  	var chartData = {
-        type: 'line',
-        data: {
-          labels: weatherDates,
-          datasets: [
-            { 
-              data: temp_max,
-              borderColor: "#3cba9f",
-              fill: false
-            },
-            { 
-              data: temp_min,
-              borderColor: "#ffcc00",
-              fill: false
-            },
-          ]
-        },
-        options: {
-          legend: {
-            display: false
-          },
-          scales: {
-            xAxes: [{
-              display: true
-            }],
-            yAxes: [{
-              display: true
-            }],
-          }
-        }
-      };
-
-    	this.chart = new Chart(ctx, chartData);
-
       let localSocket = this.socket;
 
       var self = this;
@@ -107,6 +61,76 @@ export class DashboardComponent implements OnInit {
     this._api.postEvent("0 minutes ago", "Test Event", "Test Description")
   }
 
+  loadChart(){
+    var ctx = document.getElementById("myChart");
+    var chartData = {
+        type: 'line',
+        data: {
+          labels: this.monthly_history['start_time'],
+          datasets: [
+            { 
+              label: "Complete Work Sessions"
+              data: this.monthly_history['comp_ws'],
+              borderColor: "#3cba9f",
+              fill: false
+            },
+            { 
+              label: "Inomplete Work Sessions"
+              data: this.monthly_history['incomp_ws'],
+              borderColor: "#ffcc00",
+              fill: false
+            },
+            { 
+              label: "Paused Work Sessions"
+              data: this.monthly_history['incomp_ws'],
+              borderColor: "#e55a76",
+              fill: false
+            },
+            { 
+              label: "Daily Complete"
+              data: this.monthly_history['daily_c'],
+              borderColor: "#c39797",
+              fill: false
+            },
+            { 
+              label: "Complete Break Session"
+              data: this.monthly_history['comp_bs'],
+              borderColor: "#cc0000",
+              fill: false
+            },
+            { 
+              label: "Earned Break Points"
+              data: this.monthly_history['earned_bp'],
+              borderColor: "#c71585",
+              fill: false
+            },
+            { 
+              label: "Consumed Break Points"
+              data: this.monthly_history['consumed_bp'],
+              borderColor: "#e6e6fa",
+              fill: false
+            }
+          ]
+        },
+        options: {
+          legend: {
+            display: false
+          },
+          scales: {
+            xAxes: [{
+              display: true
+            }],
+            yAxes: [{
+              display: true
+            }],
+          }
+        }
+      };
+
+      this.chart = new Chart(ctx, chartData);
+
+  }
+
   getDashboard(){
     this._api.getDashboard()
       .subscribe(
@@ -115,6 +139,7 @@ export class DashboardComponent implements OnInit {
             this.daily_history = res['daily_history']
             this.monthly_history = res['monthly_history']
             // this.events = res.events
+            this.loadChart()
           },
           err => {
             console.log("Error occured", err);

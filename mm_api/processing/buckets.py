@@ -48,9 +48,9 @@ class DataStoreService(object):
 		(MonthlyBucket, 'month')
 	]
 
-	def get_buckets_past_day(self, user):
+	def get_buckets_current_day(self, user):
 		"""
-		Retrieves hourly buckets for the past day.
+		Retrieves hourly buckets for the current day.
 		"""
 		
 		now = datetime.now()
@@ -59,18 +59,19 @@ class DataStoreService(object):
 		period_end = now.replace(minute=59,second=59,microsecond=999999)
 
 		buckets = []
+		new_hour = now.hour
 
-		for i in range(24):
+		for i in range(new_hour):
 			# convert to milliseconds
 			start_time = (period_start - datetime.utcfromtimestamp(0)).total_seconds() * 1000
 			end_time = (period_end - datetime.utcfromtimestamp(0)).total_seconds() * 1000
 
 			buckets.append(HourlyBucket("%s|%d|%d" % (user, start_time, end_time)))
 
-			new_hour = (now.hour - 1) % 24
+			new_hour -= 1
 
-			period_start = now.replace(hour=new_hour)
-			period_end = now.replace(hour=new_hour)
+			period_start = period_start.replace(hour=new_hour)
+			period_end = period_end.replace(hour=new_hour)
 
 		return buckets
 
@@ -86,16 +87,18 @@ class DataStoreService(object):
 		period_end = now.replace(hour=23,minute=59,second=59,microsecond=999999)
 
 		buckets = []
+		new_day = now.day
 
-		for i in range(now.day):
+		for i in range(new_day):
 			# convert to milliseconds
-			start_time = (now - datetime.utcfromtimestamp(0)).total_seconds() * 1000
-			end_time = (now - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+			start_time = (period_start - datetime.utcfromtimestamp(0)).total_seconds() * 1000
+			end_time = (period_end - datetime.utcfromtimestamp(0)).total_seconds() * 1000
 
 			buckets.append(DailyBucket("%s|%d|%d" % (user, start_time, end_time)))
 
-			period_start = now.replace(day=now.day - 1)
-			period_end = now.replace(day=now.day - 1)
+			period_start = period_start.replace(day=new_day)
+			period_end = period_end.replace(day=new_day)
+			new_day -= 1
 
 		return buckets
 
