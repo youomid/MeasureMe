@@ -43,19 +43,63 @@ export class APIService {
   }
 
   simulateCompleteWorkSession() {
+    var headers = new HttpHeaders()
+        .set('Authorization', 'Token ' + this._auth.getToken());
 
+    this._http.get("http://localhost:8000/simulations/complete_work_session", {headers:headers})
+      .subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log("Error occured", err);
+          }
+      );
   }
 
   simulateInCompleteWorkSession() {
+    var headers = new HttpHeaders()
+        .set('Authorization', 'Token ' + this._auth.getToken());
 
+    this._http.get("http://localhost:8000/simulations/incomplete_work_session", {headers:headers})
+      .subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log("Error occured", err);
+          }
+      );
   }
 
   simulatePausedWorkSession() {
+    var headers = new HttpHeaders()
+        .set('Authorization', 'Token ' + this._auth.getToken());
 
+    this._http.get("http://localhost:8000/simulations/paused_work_session", {headers:headers})
+      .subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log("Error occured", err);
+          }
+      );
   }
 
   simulateDailyComplete() {
+    var headers = new HttpHeaders()
+        .set('Authorization', 'Token ' + this._auth.getToken());
 
+    this._http.get("http://localhost:8000/simulations/daily_complete", {headers:headers})
+      .subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log("Error occured", err);
+          }
+      );
   }
 
 }

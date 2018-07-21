@@ -25,10 +25,10 @@ from mm_api.viewsets import SimulationViewSet
 
 
 router = DefaultRouter()
-router.register(r'simulations', SimulationViewSet, base_name='simulations')
-urlpatterns = router.urls
+router.register(r'simulations', SimulationViewSet, 'simulations')
 
-urlpatterns += [
+urlpatterns = [
+    url(r'^', include(router.urls)),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^summary/', SummaryView.as_view()),

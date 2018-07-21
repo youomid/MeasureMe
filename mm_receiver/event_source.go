@@ -229,14 +229,19 @@ func simulate(sim_type string){
 	var events []map[string]interface{}
 	switch sim_type {
 	case "complete-work-session":
+		fmt.Printf("complete-work-session\n")
 		events = gen_comp_ws()
 	case "incomplete-work-session":
+		fmt.Printf("incomplete-work-session\n")
 		events = gen_incomp_ws()
 	case "paused-work-session":
+		fmt.Printf("paused-work-session\n")
 		events = gen_comp_pws()
 	case "daily-goal-progress":
+		fmt.Printf("daily-goal-progress\n")
 		events = gen_daily_p()
 	case "daily-goal-complete":
+		fmt.Printf("daily-goal-complete\n")
 		events = gen_daily_c()
 	}
 	publish_events(events)
