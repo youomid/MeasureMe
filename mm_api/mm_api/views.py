@@ -14,7 +14,6 @@ from .serializers import (
 
 from processing.models import Event
 from core.redisapp import redis
-from django.core.serializers.json import DjangoJSONEncoder
 from processing.buckets import DataStoreService
 
 from .mixin import BucketsMixin
@@ -68,8 +67,13 @@ class DashboardView(GenericAPIView, BucketsMixin):
 		last_day = datetime.now() - timedelta(days=1)
 		# get events from the last day
 		events = (Event.objects.filter(user_name=user,date__gte=last_day)
-			.values('date', 'event_type'))
-		return json.dumps(list(events), cls=DjangoJSONEncoder)
+			.values('date', 'event_type', 'description'))
+
+		def str_time(event):
+			event['date'] = event['date'].strftime('%m/%d/%Y %H:%M:%S')
+			return event
+
+		return map(str_time, events)
 
 	def get_daily_history(self, user):
 		buckets = DataStoreService().get_buckets_current_day(user)

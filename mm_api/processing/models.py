@@ -10,4 +10,5 @@ class Event(models.Model):
 	date = models.DateTimeField(auto_now_add=True, blank=True) 
 	event_type = models.CharField(max_length=50)
 	event_info = JSONField()
+	description = models.CharField(max_length=255, default="No description.")
 	

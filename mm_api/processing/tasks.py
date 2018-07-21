@@ -29,7 +29,7 @@ def process_event(event):
 		user_name=event["user"],
 		date=pytz.utc.localize(datetime.utcfromtimestamp(event["date"]/1000)),
 		event_type=event["eventType"],
-		event_info=event.get("eventInfo", {})
+		event_info=event.get("eventInfo", {}),
 		)
 
 	# update statistics

@@ -43,15 +43,9 @@ export class DashboardComponent implements OnInit {
 
       this.socket.onmessage = function(e) {
         console.log('message', e);
-          var parsedData = JSON.parse(e.data);
-          self.events.push(parsedData)
+        var parsedData = JSON.parse(e.data);
+        self.events.push(parsedData)
       }
-
-      this.events = [
-        {'date': '27 Minutes Ago', 'title': 'Started work session', 'description': 'Studying for finals'},
-        {'date': '15 Minutes Ago', 'title': 'Paused work session', 'description': 'Studying for finals'},
-        {'date': '2 Minutes Ago', 'title': 'Finished work session', 'description': 'Studying for finals'},
-      ]
 
       this.getDashboard()
 
@@ -138,7 +132,7 @@ export class DashboardComponent implements OnInit {
             console.log(res);
             this.daily_history = res['daily_history']
             this.monthly_history = res['monthly_history']
-            // this.events = res.events
+            this.events = res.events
             this.loadChart()
           },
           err => {
