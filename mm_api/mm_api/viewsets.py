@@ -7,6 +7,10 @@ import requests
 
 
 class SimulationViewSet(viewsets.ViewSet):
+	"""
+	Send requests to the event source server to simulate work scenarios.
+	"""
+	
 	url = settings.EVENTS_SOURCE_URL	
 
 	@list_route(methods=['GET'])

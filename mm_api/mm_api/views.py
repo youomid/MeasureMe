@@ -19,37 +19,11 @@ from processing.buckets import DataStoreService
 from .mixin import BucketsMixin
 
 
-
-class SummaryView(GenericAPIView):
-
-	def get(self, request, *args, **kwargs):
-
-		Group("events").send({
-	        "text": "Message from summary view",
-	    })
-
-		return HttpResponse("SummaryView")
-
-
-class EventsView(GenericAPIView):
-	serializer_class = EventsSerializer
-
-	def get(self, request, *args, **kwargs):
-
-		return HttpResponse(self.serializer_class(
-			Event.objects.filter(request.GET.get('username')),
-			many=True)
-		)
-
-	def post(self, request, *args, **kwargs):
-		Group("events").send({
-	        "text": json.dumps(request.data),
-	    })
-
-		return HttpResponse("Event has been stored.")
-
-
 class DashboardView(GenericAPIView, BucketsMixin):
+	"""
+	Retrieve the monthly history, daily history and events feed for the dashboard.
+	"""
+
 	metrics = [
 		'comp_ws', 'incomp_ws', 'pws', 'daily_c',
 		'comp_bs', 'earned_bp', 'consumed_bp'
@@ -64,8 +38,10 @@ class DashboardView(GenericAPIView, BucketsMixin):
 			})
 
 	def get_events(self, user):
+		"""
+		Retrieve events from the last day.
+		"""
 		last_day = datetime.now() - timedelta(days=1)
-		# get events from the last day
 		events = (Event.objects.filter(user_name=user,date__gte=last_day)
 			.values('date', 'event_type', 'description'))
 

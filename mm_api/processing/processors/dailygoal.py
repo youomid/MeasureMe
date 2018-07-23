@@ -1,5 +1,12 @@
-from processing.processors.base import BaseProcessor
+# standard library imports
+import pytz
+from datetime import datetime
 
+
+from processing.processors.base import BaseProcessor
+from channels import Group
+from processing.models import Event
+from processing.buckets import DataStoreService
 
 class DailyGoalProcessor(BaseProcessor):
 	processor_for_events = (
@@ -7,5 +14,26 @@ class DailyGoalProcessor(BaseProcessor):
 		'DailyGoalCompletedEvent'
 	)
 
-	def __init__(self, event):
+	def __init__(self, event=None):
 		super(DailyGoalProcessor, self).__init__(event)
+
+	def before_process(self):
+		# send events to channels group to be sent to the events feed
+		Group("events").send({
+			"text": self.event
+		})
+
+		Event.objects.get_or_create(
+			user_name=self.event["user"],
+			date=pytz.utc.localize(datetime.utcfromtimestamp(self.event["date"]/1000)),
+			event_type=self.event["eventType"],
+			event_info=self.event.get("eventInfo", {}),
+			)
+
+	def daily_goal_progress_event(self):
+		print 'DailyGoalProgressEvent'
+
+	def daily_goal_complete_event(self):
+		print 'DailyGoalCompletedEvent'
+		# update statistics
+		DataStoreService().update_buckets(self.event)

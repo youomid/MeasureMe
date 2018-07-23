@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
-# Create your models here.
 
 class Event(models.Model):
 	user_name = models.CharField(max_length=30)

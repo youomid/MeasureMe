@@ -6,16 +6,12 @@ import (
 	"log"
 	"sync"
 	"encoding/json"
-	"math/rand"
 	"github.com/streadway/amqp"
 	"github.com/valyala/fasthttp"
 )
 
 /*
-	This script sends sample event data to our message queue 
-	and also logs each event. In the future, this script would also serve
-	as an api receiving data from registered mobile applications. In production, this api could
-	be processing thousands of events per second.
+	This script is a web server that receives requests to send sample event data to our message queue.
 */
 
 
@@ -31,22 +27,12 @@ func failOnError(err error, msg string) {
   }
 }
 
-func generate_random_event() map[string]interface{} {
-	minutes := rand.Intn(100)
-
-	msg := map[string]interface{}{"user": "test_user", "date": minutes,
-	"title": "Test title", "description": "test description"}
-
-	return msg
-}
-
 func current_time() int64 {
     return time.Now().UnixNano() / (int64(time.Millisecond)/int64(time.Nanosecond))
 }
 
 func gen_comp_ws() []map[string]interface{} {
 	// generate complete work session events
-
 	var events []map[string]interface{}
 
 	current := current_time()
@@ -92,7 +78,6 @@ func gen_comp_ws() []map[string]interface{} {
 
 func gen_incomp_ws() []map[string]interface{} {
 	// generate incomplete work session events
-
 	var events []map[string]interface{}
 
 	current := current_time()
@@ -128,7 +113,6 @@ func gen_incomp_ws() []map[string]interface{} {
 
 func gen_comp_pws() []map[string]interface{} {
 	// generate complete work session event that is paused
-
 	var events []map[string]interface{}
 
 	current := current_time()
@@ -190,7 +174,6 @@ func gen_comp_pws() []map[string]interface{} {
 
 func gen_daily_p() []map[string]interface{} {
 	// generate events for progress in daily goals
-
 	var events []map[string]interface{}
 
 	current := current_time()
@@ -210,7 +193,6 @@ func gen_daily_p() []map[string]interface{} {
 
 func gen_daily_c() []map[string]interface{} {
 	// generate complete work session event that is paused
-
 	var events []map[string]interface{}
 
 	current := current_time()
@@ -226,6 +208,7 @@ func gen_daily_c() []map[string]interface{} {
 }
 
 func simulate(sim_type string){
+	// simulate a work scenario by publishing events
 	var events []map[string]interface{}
 	switch sim_type {
 	case "complete-work-session":
@@ -248,7 +231,8 @@ func simulate(sim_type string){
 }
 
 func publish_events(events []map[string]interface{}){
-	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
+	// publish events received by the web server to rabbitmq
+	conn, err := amqp.Dial("amqp://guest:guest@localhost:5673/")
 	failOnError(err, "Failed to dial RMQ")
 
 	channel, err = conn.Channel()
@@ -294,7 +278,6 @@ func start_server(){
 
 func main() {
 	wg.Add(1)
-	// go send_sample_events(10000)
 	start_server()
 	wg.Wait()
 }

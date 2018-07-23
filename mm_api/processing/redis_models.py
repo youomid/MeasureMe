@@ -1,9 +1,18 @@
-from core.redisapp import redis
+# standard library imports
 import json
 import copy
 
+# third party imports
+
+# local imports
+from core.redisapp import redis
+
 
 class RedisDictModel(object):
+    """
+    Redis wrapper for dictionaries.
+    """
+
     _db = redis
     expires = None
     default = {}
@@ -14,15 +23,20 @@ class RedisDictModel(object):
         self._data = None
 
     def exist(self):
-        """
-        Checks if key exist in redis
-        """
         return self._db.exists(self.key)
 
-    def __hash__(self):
-        return hash(self.id)
-
     def __setitem__(self, key, value):
+        """
+        Update redis key in redis.
+
+            Args:
+                key: string containing the value to update
+                value: updated int value
+
+            Return:
+                None
+        """        
+
         if value is None:
             self._db.hdel(self.key, key)
             return
@@ -37,8 +51,15 @@ class RedisDictModel(object):
 
     def increment(self, key, val):
         """
-        Increment a value under a `key` by `val`
-        """
+        Increment a redis key by 1.
+
+            Args:
+                key: string containing the value to update
+                val: updated int value
+
+            Return:
+                None
+        """   
 
         self._db.hincrby(self.key, key, val)
 
@@ -46,6 +67,16 @@ class RedisDictModel(object):
         self._db.hdel(self.key, key)
 
     def __getitem__(self, key):
+        """
+        Retrieve a redis key's value.
+
+            Args:
+                key: string containing the value to update
+
+            Return:
+                value: an int value
+        """        
+
         value = self._data.get(key) if self._data else self._db.hget(self.key, key)
         if value is None and self.default.get(key) is None:
             raise KeyError('Key "%s" does not exist in %s' % (key, self.key))
@@ -63,9 +94,6 @@ class RedisDictModel(object):
             return value
 
     def get(self, key, default=None):
-        """
-        Returns a value under key or None
-        """
         try:
             return self.__getitem__(key)
         except KeyError:

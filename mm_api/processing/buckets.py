@@ -3,6 +3,10 @@ from datetime import datetime
 import calendar
 
 class Bucket(RedisDictModel):
+	"""
+	Bucket data structure that represents a time period of a certain length (hourly, daily, etc.).
+	This bucket contains metric data.
+	"""
 	default = {
 		'comp_ws': 0,
 		'incomp_ws': 0,
@@ -41,6 +45,10 @@ class MonthlyBucket(Bucket):
 
 
 class DataStoreService(object):
+	"""
+	This class is used to retrieve and update buckets.
+	"""
+
 
 	bucket_types = [
 		(HourlyBucket, 'hour'),
@@ -75,7 +83,6 @@ class DataStoreService(object):
 
 		return buckets
 
-
 	def get_buckets_current_month(self, user):
 		"""
 		Retrieves daily buckets for the current month.
@@ -101,7 +108,6 @@ class DataStoreService(object):
 			new_day -= 1
 
 		return buckets
-
 
 	def get_times(self, time, bucket_length):
 		"""
@@ -145,7 +151,6 @@ class DataStoreService(object):
 
 		return start_time, end_time
 
-
 	def generate_bucket_name(self, event, bucket_length):
 		"""
 		Create a unique id that is used for redis keys.
@@ -159,7 +164,7 @@ class DataStoreService(object):
 
 	def update_buckets(self, event):
 		for bucket_type in self.bucket_types:
-			bucket = bucket_type[0](self.generate_bucket_name(event), bucket_type[1])
+			bucket = bucket_type[0](self.generate_bucket_name(event, bucket_type[1]))
 			self.update_stats(bucket, event)
 
 	def update_stats(self, bucket, event):
@@ -179,17 +184,4 @@ class DataStoreService(object):
 			bucket.increment('comp_bs', 1)
 		elif event.get("eventType") == "DailyGoalCompletedEvent":
 			bucket.increment('daily_c', 1)
-
-
-
-
-
-
-
-
-
-
-
-
-
 

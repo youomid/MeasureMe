@@ -16,9 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from mm_api.views import (
-		SummaryView,
         DashboardView,
-        EventsView
 	)
 from rest_framework.routers import DefaultRouter
 from mm_api.viewsets import SimulationViewSet
@@ -31,8 +29,6 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^summary/', SummaryView.as_view()),
     url(r'^dashboard/', DashboardView.as_view()),
-    url(r'^events/', EventsView.as_view()),
 ]
 

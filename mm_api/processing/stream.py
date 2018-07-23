@@ -332,6 +332,16 @@ class EventStream(object):
             self.consumer.stop()
 
     def process_message(self, event):
+        """
+        Process the event for each processor class it belongs in.
+
+            Args:
+                event: a string 
+
+            Return:
+
+
+        """
 
         for processor_path in settings.EVENT_PROCESSOR_CLASSES:
             ps_class = import_string(processor_path)
