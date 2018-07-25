@@ -1,6 +1,10 @@
+# standard library imports
+
+# third party imports
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
+# local imports 
 from processing.stream import EventStream
 
 

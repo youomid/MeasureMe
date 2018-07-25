@@ -1,5 +1,10 @@
-# In consumers.py
+# standard library imports
+
+# third party imports
 from channels import Group
+
+# local imports
+
 
 # Connected to websocket.connect
 def ws_connect(message):

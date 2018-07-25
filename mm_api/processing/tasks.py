@@ -3,10 +3,10 @@ import ast
 import json
 import time
 import pytz
-import requests
 from datetime import datetime
 
 # third party imports
+import requests
 from channels import Group
 from django.conf import settings
 

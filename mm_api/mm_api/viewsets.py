@@ -1,9 +1,13 @@
+# standard library imports
+
+# third party imports
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
 from django.conf import settings
-
 import requests
+
+# local imports
 
 
 class SimulationViewSet(viewsets.ViewSet):

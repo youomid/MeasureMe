@@ -1,5 +1,10 @@
+# standard library imports
+
+# local imports
+
+# third party imports
+from django.conf import settings
 import redis
 
-from django.conf import settings
 
 redis = redis.StrictRedis(**settings.REDIS_DATASTORE)

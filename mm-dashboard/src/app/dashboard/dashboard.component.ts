@@ -29,25 +29,21 @@ export class DashboardComponent implements OnInit {
     "consumed_bp":"Consumed Break Points"
     }
 
-    daily_history = []
-    monthly_history = []
+  daily_history = []
+  monthly_history = []
 
   constructor(private _api: APIService) { }
 
   ngOnInit() {
   	var res = this._api.testData()
+    let localSocket = this.socket;
+    var self = this;
 
-      let localSocket = this.socket;
-
-      var self = this;
-
-      this.socket.onmessage = function(e) {
-        console.log('message', e);
-        var parsedData = JSON.parse(e.data);
-        self.events.push(parsedData)
-      }
-
-      this.getDashboard()
+    this.socket.onmessage = function(e) {
+      var parsedData = JSON.parse(e.data);
+      self.events.push(parsedData)
+    }
+    this.getDashboard()
 
   }
 

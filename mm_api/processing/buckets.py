@@ -1,6 +1,12 @@
-from processing.redis_models import RedisDictModel
-from datetime import datetime
+# standard library imports
 import calendar
+from datetime import datetime
+
+# third party imports
+
+# local imports
+from processing.redis_models import RedisDictModel
+
 
 class Bucket(RedisDictModel):
 	"""

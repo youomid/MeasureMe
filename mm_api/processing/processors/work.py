@@ -2,8 +2,11 @@
 import pytz
 from datetime import datetime
 
-from processing.processors.base import BaseProcessor
+# third party imports
 from channels import Group
+
+# local imports
+from processing.processors.base import BaseProcessor
 from processing.models import Event
 from processing.buckets import DataStoreService
 

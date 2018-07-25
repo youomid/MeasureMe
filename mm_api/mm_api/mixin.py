@@ -1,8 +1,11 @@
-
+# standard library imports
 from collections import defaultdict
-import random
 from datetime import datetime
+import random
 
+# third party imports
+
+# local imports
 
 
 class BucketsMixin(object):

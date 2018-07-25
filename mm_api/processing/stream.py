@@ -1,9 +1,13 @@
-from django.conf import settings
-from processing.processors.base import BaseProcessor
-
-
+# standard library imports
 import pika
 import importlib
+
+# third party imports
+from django.conf import settings
+
+# local imports
+from processing.processors.base import BaseProcessor
+
 
 def import_string(module_class_string):
     """
@@ -339,8 +343,7 @@ class EventStream(object):
                 event: a string 
 
             Return:
-
-
+                None
         """
 
         for processor_path in settings.EVENT_PROCESSOR_CLASSES:

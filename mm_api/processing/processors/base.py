@@ -1,7 +1,12 @@
-from core.celeryapp import app as celery
-from processing.tasks import process_event
+# standard library imports
 import json
 import re
+
+# third party imports
+
+# local imports
+from core.celeryapp import app as celery
+from processing.tasks import process_event
 
 
 first_cap_re = re.compile('(.)([A-Z][a-z]+)')

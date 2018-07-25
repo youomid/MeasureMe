@@ -17,6 +17,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
+    // check if logged in
     var authToken = this._auth.getToken();
 
   	if(authToken){
