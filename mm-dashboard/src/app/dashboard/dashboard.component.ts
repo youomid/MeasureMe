@@ -35,7 +35,6 @@ export class DashboardComponent implements OnInit {
   constructor(private _api: APIService) { }
 
   ngOnInit() {
-  	var res = this._api.testData()
     let localSocket = this.socket;
     var self = this;
 
