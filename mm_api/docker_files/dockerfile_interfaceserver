@@ -1,6 +1,6 @@
 FROM python:2-onbuild
 
-COPY start_server.sh /start_server.sh
+COPY scripts/start_server.sh /start_server.sh
 
 EXPOSE 8000
 

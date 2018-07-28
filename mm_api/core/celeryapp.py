@@ -13,4 +13,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mm_api.settings')
 
 app = Celery('mm_api', broker=settings.CONSUMER_URL)
 
+app.config_from_object('django.conf:settings')
+
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
