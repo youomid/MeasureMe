@@ -1,0 +1,15 @@
+FROM golang:1.10.1 
+
+WORKDIR /go/src/app
+
+COPY . .
+
+EXPOSE 6470
+
+RUN export GOPATH=/usr/local/go/
+
+RUN go get github.com/valyala/fasthttp
+RUN go get github.com/streadway/amqp
+
+CMD go run event_source.go
+

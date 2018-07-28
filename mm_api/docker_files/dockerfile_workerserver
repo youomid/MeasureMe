@@ -1,6 +1,6 @@
 FROM python:2-onbuild
 
-COPY start_worker.sh /start_worker.sh
+COPY scripts/start_worker.sh /start_worker.sh
 
 RUN pip install -r requirements.txt
 

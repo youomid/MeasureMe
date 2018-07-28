@@ -17,13 +17,14 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
+    // check if logged in
     var authToken = this._auth.getToken();
 
   	if(authToken){
       this._auth.validateToken(authToken)
         .subscribe(
             res => {
-              console.log('validated');
+              this.goToDashboard()
             },
             err => {
               this.router.navigate(['/login']);
@@ -35,8 +36,8 @@ export class MainComponent implements OnInit {
 
   }
 
-  goToSummary(){
-    this.router.navigate(['/main/summary']);
+  goToDashboard(){
+    this.router.navigate(['/main/dashboard']);
   }
 
 }

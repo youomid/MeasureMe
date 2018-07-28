@@ -4,5 +4,5 @@ COPY . /
 
 RUN pip install -r requirements.txt
 
-CMD /subscribe_events.sh
+CMD /scripts/subscribe_events.sh
 

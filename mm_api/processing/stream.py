@@ -1,9 +1,21 @@
+# standard library imports
+import pika
+import importlib
+
+# third party imports
 from django.conf import settings
+
+# local imports
 from processing.processors.base import BaseProcessor
 
 
-import pika
-
+def import_string(module_class_string):
+    """
+    will import and return class from a module base on string provided
+    """
+    module_name, class_name = module_class_string.rsplit(".", 1)
+    md = importlib.import_module(module_name)
+    return getattr(md, class_name)
 
 class RMQConsumer(object):
     """This is a consumer that will handle unexpected interactions
@@ -314,10 +326,6 @@ class EventStream(object):
         self.consumer = RMQConsumer(settings.CONSUMER_URL, callback=self.callback)
 
     def callback(self, unused_channel, basic_deliver, properties, body):
-        # print 'unused_channel %s\nbasic_deliver \
-        #  %s\nproperties %s\n body %s' % (unused_channel,
-        #     basic_deliver,properties,body)
-
         self.process_message(body)
         self.consumer.acknowledge_message(basic_deliver.delivery_tag)
 
@@ -328,7 +336,21 @@ class EventStream(object):
             self.consumer.stop()
 
     def process_message(self, event):
-        BaseProcessor().process_message(event)
+        """
+        Process the event for each processor class it belongs in.
+
+            Args:
+                event: a string 
+
+            Return:
+                None
+        """
+
+        for processor_path in settings.EVENT_PROCESSOR_CLASSES:
+            ps_class = import_string(processor_path)
+            ps_instance = ps_class(event)
+            if ps_instance.process_if() is True:
+                ps_instance.process_message()
 
 
 
