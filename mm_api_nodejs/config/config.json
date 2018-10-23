@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "mm_api",
+    "password": "test",
+    "database": "mm_api_nodejs",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "mm_api",
+    "password": "test",
+    "database": "mm_api_nodejs",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "mm_api",
+    "password": "test",
+    "database": "mm_api_nodejs",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
