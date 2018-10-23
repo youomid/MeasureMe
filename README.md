@@ -25,6 +25,13 @@ The api is written using the django framework, and can be run using the commands
 `daphne -b 0.0.0.0 -p 8000 mm_api.asgi:channel_layer`
 `python manage.py runworker`
 
+## MM_API_NODEJS
+This app is similar to mm_api above, but is written using expressjs and has most of the same features including a login service, postgres models, api endpoints, etc.
+
+It can be run using the command below.
+
+`node app.js`
+
 ## Celery_Workers
 The celery workers are used to process the events for use by the dashboard. On top of the processing the events is stored in postgres as a django model object, and is also sent to subscribed django channels/groups. In this case, there is only the guest user subscribed to the events group.
 
