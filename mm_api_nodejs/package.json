@@ -21,7 +21,7 @@
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
     "redis": "^2.8.0",
-    "sequelize": "^4.38.0",
+    "sequelize": "^5.15.1",
     "socket.io": "^2.1.1",
     "superagent": "^3.8.3",
     "underscore": "^1.9.1"
